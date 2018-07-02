@@ -1,7 +1,7 @@
 from flask import Flask
 from redis import Redis, RedisError
 from ETHgen import sk, pk, ad 
-from BTCt import dest, amount, tx
+from BTCtrans import dest, amount, tx
 import os
 import socket  
 
