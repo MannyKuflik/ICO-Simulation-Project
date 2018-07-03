@@ -2,6 +2,7 @@ from flask import Flask
 from redis import Redis, RedisError
 from ETHgen import sk, pk, ad 
 from BTCtrans import BTC_process
+from GenAddrs import full_wallets
 import os
 import socket  
 import random
@@ -17,6 +18,14 @@ def hello():
         visits = redis.incr("counter")
     except RedisError:
         visits = "<i>cannot connect to Redis, counter disabled</i>"
+
+    try:
+        wallets = full_wallets(50, 75)
+        btc_addrs = wallets[0]
+        eth_addrs = wallets[1]
+    except:
+        btc_addrs = []
+        eth_addrs = []
 
     try: 
         amnt = float(random.randrange(1, 500))/100
