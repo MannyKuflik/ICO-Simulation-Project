@@ -18,6 +18,7 @@ tx = key.create_transaction(outputs, fee=8500, unspents=unspents)
 print("TRANSACTION: ", tx)
 # stx = ntwrk.broadcast_tx_testnet(tx)
 # print("SUCCESS!")
+# key.send(outputs, fee=8500, unspents=unspents)
 
 
 # def get_unspent_testnet(cls, address)
