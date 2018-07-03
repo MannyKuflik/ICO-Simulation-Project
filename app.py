@@ -34,6 +34,7 @@ def hello():
 
     try:
         val = random.randint(10000, 10000000)
+        ethamount = val / (10**18)
         from_address = '0xde055eCaB590E0E7f2Cb06445dd6272fb7D65129'
         to_address = '0x6F544455D57caA0787A5200DA1FC379fc00B5Da5'
         priv_key = '8c70afd6be9a772cd1fe852c411cc67b829f402c733a45d27b9b8eb6b9710dc4'
@@ -56,14 +57,14 @@ def hello():
            "<b>TX:</b> <details>{tx}</details><br/><br/>" \
            "<h2><u>ETH Transaction Details</u>{ethfl}</h2><br/>"\
            "<b>Destination Address:</b> <details>{to_address}</details><br/>" \
-           "<b>Amount:</b> <details>{val} wei</details><br/>" \
+           "<b>Amount:</b> <details>{ethamount} ETH</details><br/>" \
            "<b>TX:</b> <details>{ethtx}</details><br/><br/>" \
         #    "<h2><u>BTC Wallet Details</u></h2><br/>"\
         #    "<b>Public Key:</b> {Bpk}<br/>" \
         #    "<b>Private Key:</b> {Bsk}<br/>" \
         #    "<b>Address:</b> {Badd}<br/><br/>" \
         #    "<b>Visits:</b> {visits}"
-    return html.format(pk=pk, ad=ad, sk=sk, hostname=socket.gethostname(), visits=visits, dest=dest, amount=amount, tx=tx, btcfl=btcfl, to_address=to_address, val=val, ethtx=ethtx, ethfl=ethfl)
+    return html.format(pk=pk, ad=ad, sk=sk, hostname=socket.gethostname(), visits=visits, dest=dest, amount=amount, tx=tx, btcfl=btcfl, to_address=to_address, ethamount=ethamount, ethtx=ethtx, ethfl=ethfl)
     #Bpk=Bpk, Bsk=Bsk, Badd=Badd,
 
 if __name__ == "__main__":
