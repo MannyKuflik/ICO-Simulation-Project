@@ -35,14 +35,12 @@ def full_wallets(eth_num, btc_num):
         address = address = Factory.getETHAddr(i)
         eth_addrs.append(address)
     print('got dat Eth boy')
-    print(eth_addrs)
 # index_btc = 0
     v2 = btc_num
     btc_addrs = []
     for i in range(0,v2):
         btc_addrs.append(gen_btc(i))
     print("Serving up some BTC B-style brovis")
-    print(btc_addrs)
 
     return (btc_addrs, eth_addrs)
 

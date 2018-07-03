@@ -5,3 +5,4 @@ Redis
 eth-utils
 pycoin
 bit
+web3

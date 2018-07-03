@@ -15,8 +15,8 @@ app = Flask(__name__)
 # VAL = random.randint(10000, 10000000)
 
 web3 = Web3(HTTPProvider('https://rinkeby.infura.io/UVgPTn3TgFMB0KhHUlif'))
-if web3.isConnected():
-    print('connected to ', 'https://rinkeby.infura.io/UVgPTn3TgFMB0KhHUlif')
+# if web3.isConnected():
+     # print('connected to ', 'https://rinkeby.infura.io/UVgPTn3TgFMB0KhHUlif')
 
 def construct_tx(from_addr, to_address, val):
     if not web3.isChecksumAddress(to_address):
@@ -35,12 +35,12 @@ def construct_tx(from_addr, to_address, val):
 
 def send_eth(from_addr, to_address, val, priv_key):
     tx = construct_tx(from_addr, to_address, val) # this generates the transaction dict
-    print(tx)
+    # print(tx)
 
     web3.eth.enable_unaudited_features()
 
     signed_tx = web3.eth.account.signTransaction(tx, priv_key)  # this returns a blob of hexadecimal text
 
-    web3.eth.sendRawTransaction(signed_tx.rawTransaction)  # this broadcasts the tx and returns a transaction hash
+    #web3.eth.sendRawTransaction(signed_tx.rawTransaction)  # this broadcasts the tx and returns a transaction hash
 
     return web3.toHex(signed_tx.rawTransaction)
