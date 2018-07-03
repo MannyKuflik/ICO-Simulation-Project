@@ -4,3 +4,4 @@ Flask
 Redis
 eth-utils
 pycoin
+bit
