@@ -28,7 +28,7 @@ def construct_tx(from_addr, to_address, val):
         'to': to_address,
         'data': '',
         'value': val,
-        'gas': 21000,
+        'gas': 24000,
         'gasPrice': web3.eth.gasPrice
     }
     return txparams
@@ -41,6 +41,7 @@ def send_eth(from_addr, to_address, val, priv_key):
 
     signed_tx = web3.eth.account.signTransaction(tx, priv_key)  # this returns a blob of hexadecimal text
 
-    #web3.eth.sendRawTransaction(signed_tx.rawTransaction)  # this broadcasts the tx and returns a transaction hash
+    #txhash = web3.eth.sendRawTransaction(signed_tx.rawTransaction)  # this broadcasts the tx and returns a transaction hash
 
-    return web3.toHex(signed_tx.rawTransaction)
+    return 'nada'#web3.toHex(txhash)
+

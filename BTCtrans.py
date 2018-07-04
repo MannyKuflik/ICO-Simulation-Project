@@ -30,12 +30,12 @@ def BTC_process(destination, priv_wif, fee):
     unspents = ntwrk.get_unspent_testnet(origin) # get unspent BTC from origin adress
     outputs = [(dest, amnt, 'mbtc')] # define tuple to use as outputs: [(Address_to_send_to, Amount, Currency)]
     tx = key.create_transaction(outputs, fee=f, unspents=unspents) # generate signed transaction
-    ntwrk.broadcast_tx_testnet(tx) # broadcast tx to network
+    receipt = ntwrk.get_transactions_testnet(dest)
+    # ntwrk.broadcast_tx_testnet(tx) # broadcast tx to network
     ## alternativley key.send() takes the same arguments as key.create_transaction(), 
     # but it creates the signed transaction and broadcasts it in a single step
     # ex: >>> key.send(outputs, fee=f, unspents=unspents)
-    return tx
-
+    return receipt
 # def get_unspent_testnet(cls, address)
 # def broadcast_tx_testnet(cls, tx_hex)
 # def create_transaction or send(self, outputs, fee=None, leftover=None, combine=True, message=None, unspents=None):
