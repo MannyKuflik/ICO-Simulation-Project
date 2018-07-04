@@ -28,7 +28,7 @@ def construct_tx(from_addr, to_address, val):
         'to': to_address,
         'data': '',
         'value': val,
-        'gas': 21000,
+        'gas': 24000,
         'gasPrice': web3.eth.gasPrice
     }
     return txparams

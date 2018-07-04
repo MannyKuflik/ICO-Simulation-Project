@@ -1,45 +1,90 @@
 <!DOCTYPE html>
 <HTML>
-<b>{{data}}</b>
-<b>BTC Wallets:</b> {{btcs}}
+
+<b>Hostname:</b> {hostname}
 <br/>
 <br/>
-<b>ETH Wallets:</b> {{eths}}
+<h1 align="center" style="margin: 0">
+    <u>
+        <b>ICO SIMULATION SERVICE</b>
+    </u>
+</h1>
+<p align="center" style="margin: 0">By Lawrence Li and Emanuel Kuflik</p>
 <br/>
-<br/>
-<b>Hostname:</b> {{hostname}}
-<br/>
-<br/>
-<h2>
-    <u>BTC Transaction Details</u>{{btcfl}}</h2>
-<br/>
-<table style="border: 1px solid black">
+
+<table>
+        {% for DataSet in arr %}
+        <tr>
+        <td>{{ DataSet.address }}</td>
+        <td>{{ DataSet.amount }}</td>
+        <td>{{ DataSet.txhash }}</td>
+        </tr>
+        {% endfor %}
+</table>
+
+<!-- <h2>
+    <u>BTC Transaction Details</u>{btcfl}</h2>
+<br/> -->
+<table style="table-layout: fixed; width: 50%; float: left;  border: 1px solid black">
+    <col width="30%">
+    <col width="25%">
+    <col width="40%">
     <tr>
-        <th style="border: 1px solid black">Address</th>
-        <th style="border: 1px solid black">Amount</th>
-        <th style="border: 1px solid black">TX</th>
+        <th colspan="3"> BTC DATA {{btcfl}}</th>
     </tr>
     <tr>
-        <td style="border: 1px solid black">{{dest}}</td>
-        <td style="border: 1px solid black">{{amount}}</td>
-        <td style="border: 1px solid black">{{tx}}</td>
+        <th style="word-break: break-all; border: 1px solid black; color: snow; background-color: rgb(255, 145, 0)">Address</th>
+        <th style="word-break: break-all; width: 75;border: 1px solid black; color: snow; background-color: rgb(255, 123, 0)">Amount</th>
+        <th style="word-break: break-all; border: 1px solid black; color: snow; background-color: rgb(255, 94, 0)">TX Hash</th>
+    </tr>
+    <tr>
+        <td style="word-break: break-all; border: 1px solid black; background-color: rgba(255, 145, 0, .4)">
+            <div style="font-size: 15px">{{dest}}</div>
+        </td>
+        <td style="word-break: break-all; border: 1px solid black; background-color: rgb(255, 123, 0, .4)">{{amount}} BTC</td>
+        <td style="word-break: break-all; border: 1px solid black; background-color: rgb(255, 94, 0, .4)">
+            <div style="font-size: 14px">{{tx}}</div>
+        </td>
     </tr>
 </table>
-<b>Destination Address:</b>
-<details>{{dest}}</details>
+<!-- <b>Destination Address:</b>
+<details>{dest}</details>
 <br/>
 <b>Amount:</b>
 <details>{{amount}} BTC</details>
 <br/>
 <b>TX:</b>
-<details>{{tx}}</details>
+<details>{tx}</details> -->
+<!-- <h2>
+    <u>ETH Transaction Details</u>{ethfl}</h2>
+<br/> -->
+<table style="table-layout: fixed; float: left; width: 50%; border: 1px solid black">
+    <col width="35%">
+    <col width="25%">
+    <col width="40%">
+    <tr>
+        <th colspan="3"> ETH DATA {{ethfl}}</th>
+    </tr>
+    <tr>
+        <th style="word-break: break-all; border: 1px solid black; color: snow; background-color: steelblue">Address</th>
+        <th style="word-break: break-all; border: 1px solid black; color: snow; background-color: blue">Amount</th>
+        <th style="word-break: break-all; border: 1px solid black; color: snow; background-color: navy">TX Hash</th>
+    </tr>
+    <tr>
+        <td style="word-break: break-all; border: 1px solid black; background-color: rgba(70, 131, 180, 0.4)">
+            <div style="font-size: 15px">{{to_address}}</div>
+        </td>
+        <td style="word-break: break-all; border: 1px solid black; background-color:  rgba(0, 0, 255, 0.4)">{{ethamount}} ETH</td>
+        <td style="word-break: break-all; border: 1px solid black; background-color: rgba(0, 0, 128, 0.4)">
+            <font size="1">
+                <div style="font-size: 14px">{{ethtx}}</div>
+        </td>
+    </tr>
+</table>
+
 <br/>
-<br/>
-<h2>
-    <u>ETH Transaction Details</u>{{ethfl}}</h2>
-<br/>
-<b>Destination Address:</b>
-<details>{{to_address}}</details>
+<!-- <b>Destination Address:</b>
+<details>{to_address}</details>
 <br/>
 <b>Amount:</b>
 <details>{{ethamount}} ETH</details>
@@ -47,5 +92,6 @@
 <b>TX:</b>
 <details>{{ethtx}}</details>
 <br/>
-<br/>
+<br/> -->
+
 </HTML>
