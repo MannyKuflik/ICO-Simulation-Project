@@ -1,16 +1,34 @@
 from flask import Flask, render_template
-from redis import Redis, RedisError
 from BTCtrans import BTC_process
 from ETHtrans import send_eth
 from GenAddrs import full_wallets
 import os
+import json
 import socket  
 import random
-
-# Connect to Redis
-redis = Redis(host='127.0.0.1', port=6379)
+import mysql.connector
 
 app = Flask(__name__)
+
+def connect():
+    config = {
+            'user': 'root',
+            'password': 'HorcruX8!',
+            'host': 'localhost',
+            'port': '3306',
+            'database': 'BROVIS'
+        }
+    connection = mysql.connector.connect(**config)
+    cursor = connection.cursor()
+    cursor.execute("INSERT INTO bitcoin "
+                   "(name, mission) "
+                   "VALUES ('B-style', 'Brovis')")
+    connection.commit()
+    cursor.execute('SELECT name, mission FROM charity')
+    results = [{name: mission} for (name, mission) in cursor]
+    cursor.close()
+    connection.close()
+    print(results)
 
 def btctrans(dest):
     try: 
@@ -43,58 +61,41 @@ def ethtrans(to_address):
         to_address = "unable to make transaction"
         ethfl = "(Failed)"
 
-#@app.route("/")
+@app.route("/")
 def hello():
+    # try:
+    #     visits = redis.incr("counter")
+    # except RedisError:
+    #     visits = "<i>cannot connect to Redis, counter disabled</i>"
     try:
-        visits = redis.incr("counter")
-    except RedisError:
-        visits = "<i>cannot connect to Redis, counter disabled</i>"
-
-    try:
-        wallets = full_wallets(10, 10)
-        btc_addrs = wallets[0]
-        eth_addrs = wallets[1]
+        wallets = full_wallets(5, 5)
+        btcs = wallets[0]
+        eths = wallets[1]
     except:
-        btc_addrs = []
-        eth_addrs = []
+        btcs = []
+        eths = []
 
     btc_trans = []
     eth_trans = []
 
-    for address in btc_addrs:
-        trans = btctrans(address)
-        btc_trans.append(trans)
+    # for address in btcs:
+    #     trans = btctrans(address)
+    #     btc_trans.append(trans)
 
-    for address in eth_addrs:
-        trans = ethtrans(address)
-        eth_trans.append(trans)
+    # for address in eths:
+    #     trans = ethtrans(address)
+    #     eth_trans.append(trans)
     
     print(btc_trans)
     print(eth_trans)
-
-    # html = "<b>Redis Visits:</b> {visits}<br/><br/>" \
-    #        "<b>Hostname:</b> {hostname}<br/><br/>" \
-    #        "<h2><u>BTC Transaction Details</u>{btcfl}</h2><br/>"\
-    #        "<b>Destination Address:</b> <details>{dest}</details><br/>" \
-    #        "<b>Amount:</b> <details>{amount} BTC</details><br/>" \
-    #        "<b>TX:</b> <details>{tx}</details><br/><br/>" \
-    #        "<h2><u>ETH Transaction Details</u>{ethfl}</h2><br/>"\
-    #        "<b>Destination Address:</b> <details>{to_address}</details><br/>" \
-    #        "<b>Amount:</b> <details>{ethamount} ETH</details><br/>" \
-    #        "<b>TX:</b> <details>{ethtx}</details><br/><br/>" \
-        #    "<h2><u>ETH Wallet Details</u></h2><br/>"\
-        #    "<b>Public Key:</b> <details>{pk}</details><br/>" \
-        #    "<b>Private Key:</b> <details>{sk}</details><br/>" \
-        #    "<b>Address:</b> <details>{ad}</details><br/><br/>" \
-        #    "<h2><u>BTC Wallet Details</u></h2><br/>"\
-        #    "<b>Public Key:</b> {Bpk}<br/>" \
-        #    "<b>Private Key:</b> {Bsk}<br/>" \
-        #    "<b>Address:</b> {Badd}<br/><br/>" \
-        #    "<b>Visits:</b> {visits}"
-    return render_template('home.html',hostname=socket.gethostname(), btcs=btcs, eths=eths, visits=visits, dest=dest, amount=amount, tx=tx, btcfl=btcfl, to_address=to_address, ethamount=ethamount, ethtx=ethtx, ethfl=ethfl)
+    #data = 'Hello World'
+    connect()
+    #return json.dumps({'data': connect()})
+    #return render_template('home.html',hostname=socket.gethostname(), btcs=btcs, eths=eths, dest=dest, amount=amount, tx=tx, btcfl=btcfl, to_address=to_address, ethamount=ethamount, ethtx=ethtx, ethfl=ethfl)
     # return html.format(hostname=socket.gethostname(), btcs=btcs, eths=eths, visits=visits, dest=dest, amount=amount, tx=tx, btcfl=btcfl, to_address=to_address, ethamount=ethamount, ethtx=ethtx, ethfl=ethfl)
     # pk=pk, ad=ad, sk=sk, Bpk=Bpk, Bsk=Bsk, Badd=Badd,
+    #return render_template('home.html', data=data)
 
 if __name__ == "__main__":
-    hello()
+   hello()
     #app.run(host='0.0.0.0', port=80)

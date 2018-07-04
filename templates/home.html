@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <HTML>
+<b>{{data}}</b>
 <b>BTC Wallets:</b> {{btcs}}
 <br/>
 <br/>
-<b>ETH Wallets:</b> {eths}
+<b>ETH Wallets:</b> {{eths}}
 <br/>
 <br/>
-<b>Hostname:</b> {hostname}
+<b>Hostname:</b> {{hostname}}
 <br/>
 <br/>
 <h2>
-    <u>BTC Transaction Details</u>{btcfl}</h2>
+    <u>BTC Transaction Details</u>{{btcfl}}</h2>
 <br/>
 <table style="border: 1px solid black">
     <tr>
@@ -25,26 +26,26 @@
     </tr>
 </table>
 <b>Destination Address:</b>
-<details>{dest}</details>
+<details>{{dest}}</details>
 <br/>
 <b>Amount:</b>
-<details>{amount} BTC</details>
+<details>{{amount}} BTC</details>
 <br/>
 <b>TX:</b>
-<details>{tx}</details>
+<details>{{tx}}</details>
 <br/>
 <br/>
 <h2>
-    <u>ETH Transaction Details</u>{ethfl}</h2>
+    <u>ETH Transaction Details</u>{{ethfl}}</h2>
 <br/>
 <b>Destination Address:</b>
-<details>{to_address}</details>
+<details>{{to_address}}</details>
 <br/>
 <b>Amount:</b>
-<details>{ethamount} ETH</details>
+<details>{{ethamount}} ETH</details>
 <br/>
 <b>TX:</b>
-<details>{ethtx}</details>
+<details>{{ethtx}}</details>
 <br/>
 <br/>
 </HTML>
