@@ -21,16 +21,19 @@ import random
 # key.send(outputs, fee=8500, unspents=unspents)
 
 def BTC_process(destination, priv_wif, fee):
-    ntwrk = NetworkAPI()
-    f = fee
-    dest = destination
-    key = PrivateKeyTestnet(priv_wif)
-    org = key.address
-    amnt = float(random.randrange(1, 500))/100
-    unspents = ntwrk.get_unspent_testnet(org)
-    outputs = [(dest, amnt, 'mbtc')]
-    tx = key.create_transaction(outputs, fee=f, unspents=unspents)
-    # ntwrk.broadcast_tx_testnet(tx)
+    ntwrk = NetworkAPI() #define netwrok class from bit
+    f = fee # assign variables
+    dest = destination # assign variables
+    key = PrivateKeyTestnet(priv_wif) # get key from inputed private_key wif
+    origin = key.address
+    amnt = float(random.randrange(1, 500))/100 # generate random amount for transaction
+    unspents = ntwrk.get_unspent_testnet(origin) # get unspent BTC from origin adress
+    outputs = [(dest, amnt, 'mbtc')] # define tuple to use as outputs: [(Address_to_send_to, Amount, Currency)]
+    tx = key.create_transaction(outputs, fee=f, unspents=unspents) # generate signed transaction
+    ntwrk.broadcast_tx_testnet(tx) # broadcast tx to network
+    ## alternativley key.send() takes the same arguments as key.create_transaction(), 
+    # but it creates the signed transaction and broadcasts it in a single step
+    # ex: >>> key.send(outputs, fee=f, unspents=unspents)
     return tx
 
 # def get_unspent_testnet(cls, address)

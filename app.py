@@ -1,7 +1,8 @@
-from flask import Flask
+from flask import Flask, render_template
 from redis import Redis, RedisError
 from BTCtrans import BTC_process
 from ETHtrans import send_eth
+# from GenAddrs import full_wallets
 import os
 import socket  
 import random
@@ -13,18 +14,18 @@ app = Flask(__name__)
 
 @app.route("/")
 def hello(): 
+
     try:
         visits = redis.incr("counter")
     except RedisError:
         visits = "<i>cannot connect to Redis, counter disabled</i>"
-
-    # try:
-    #     wallets = full_wallets(50, 75)
-    #     btc_addrs = wallets[0]
-    #     eth_addrs = wallets[1]
-    # except:
-    #     btc_addrs = []
-    #     eth_addrs = []
+    try:
+        #wallets = full_wallets(3, 3)
+        btcs = []#wallets[0]
+        eths = []#wallets[1]
+    except:
+        btcs = []
+        eths = []
 
     try: 
         amnt = float(random.randrange(1, 500))/100
@@ -53,9 +54,11 @@ def hello():
         to_address = "unable to make transaction"
         ethfl = "(Failed)"
 
-    html = "<b>Redis Visits:</b> {visits}<br/><br/>" \
+    html = "<b>BTC Wallets:</b> {btcs}<br/><br/>" \
+           "<b>ETH Wallets:</b> {eths}<br/><br/>" \
            "<b>Hostname:</b> {hostname}<br/><br/>" \
            "<h2><u>BTC Transaction Details</u>{btcfl}</h2><br/>"\
+           "<table><tr><th>Address</th><th>Amount</th><th>TX</th></tr><tr><td>{dest}</td><td>{amount}</td><td>{tx}</td></tr></table>"\
            "<b>Destination Address:</b> <details>{dest}</details><br/>" \
            "<b>Amount:</b> <details>{amount} BTC</details><br/>" \
            "<b>TX:</b> <details>{tx}</details><br/><br/>" \
@@ -72,7 +75,8 @@ def hello():
         #    "<b>Private Key:</b> {Bsk}<br/>" \
         #    "<b>Address:</b> {Badd}<br/><br/>" \
         #    "<b>Visits:</b> {visits}"
-    return html.format(hostname=socket.gethostname(), visits=visits, dest=dest, amount=amount, tx=tx, btcfl=btcfl, to_address=to_address, ethamount=ethamount, ethtx=ethtx, ethfl=ethfl)
+    return render_template('home.html',hostname=socket.gethostname(), btcs=btcs, eths=eths, visits=visits, dest=dest, amount=amount, tx=tx, btcfl=btcfl, to_address=to_address, ethamount=ethamount, ethtx=ethtx, ethfl=ethfl)
+    # return html.format(hostname=socket.gethostname(), btcs=btcs, eths=eths, visits=visits, dest=dest, amount=amount, tx=tx, btcfl=btcfl, to_address=to_address, ethamount=ethamount, ethtx=ethtx, ethfl=ethfl)
     # pk=pk, ad=ad, sk=sk, Bpk=Bpk, Bsk=Bsk, Badd=Badd,
 
 if __name__ == "__main__":

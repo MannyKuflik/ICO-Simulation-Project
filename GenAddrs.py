@@ -1,6 +1,5 @@
 import eth_utils
 from pycoin.key.BIP32Node import BIP32Node
-from tqdm import tqdm
 
 class TransactionFactory:
     def __init__(self, xpub):
@@ -43,6 +42,4 @@ def full_wallets(eth_num, btc_num):
     print("Serving up some BTC B-style brovis")
 
     return (btc_addrs, eth_addrs)
-
-full_wallets(50, 50)
 
