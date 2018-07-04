@@ -1,6 +1,5 @@
 import eth_utils
 from pycoin.key.BIP32Node import BIP32Node
-from tqdm import tqdm
 
 class TransactionFactory:
     def __init__(self, xpub):

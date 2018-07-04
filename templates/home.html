@@ -1,19 +1,50 @@
-html = "<b>Redis Visits:</b> {visits}<br/><br/>" \
-       "<b>Hostname:</b> {hostname}<br/><br/>" \
-       "<h2><u>BTC Transaction Details</u>{btcfl}</h2><br/>"\
-       "<b>Destination Address:</b> <details>{dest}</details><br/>" \
-        "<b>Amount:</b> <details>{amount} BTC</details><br/>" \
-        "<b>TX:</b> <details>{tx}</details><br/><br/>" \
-        "<h2><u>ETH Transaction Details</u>{ethfl}</h2><br/>"\
-    #        "<b>Destination Address:</b> <details>{to_address}</details><br/>" \
-    #        "<b>Amount:</b> <details>{ethamount} ETH</details><br/>" \
-    #        "<b>TX:</b> <details>{ethtx}</details><br/><br/>" \
-        #    "<h2><u>ETH Wallet Details</u></h2><br/>"\
-        #    "<b>Public Key:</b> <details>{pk}</details><br/>" \
-        #    "<b>Private Key:</b> <details>{sk}</details><br/>" \
-        #    "<b>Address:</b> <details>{ad}</details><br/><br/>" \
-        #    "<h2><u>BTC Wallet Details</u></h2><br/>"\
-        #    "<b>Public Key:</b> {Bpk}<br/>" \
-        #    "<b>Private Key:</b> {Bsk}<br/>" \
-        #    "<b>Address:</b> {Badd}<br/><br/>" \
-        #    "<b>Visits:</b> {visits}"
+<!DOCTYPE html>
+<HTML>
+<b>BTC Wallets:</b> {{btcs}}
+<br/>
+<br/>
+<b>ETH Wallets:</b> {eths}
+<br/>
+<br/>
+<b>Hostname:</b> {hostname}
+<br/>
+<br/>
+<h2>
+    <u>BTC Transaction Details</u>{btcfl}</h2>
+<br/>
+<table style="border: 1px solid black">
+    <tr>
+        <th style="border: 1px solid black">Address</th>
+        <th style="border: 1px solid black">Amount</th>
+        <th style="border: 1px solid black">TX</th>
+    </tr>
+    <tr>
+        <td style="border: 1px solid black">{{dest}}</td>
+        <td style="border: 1px solid black">{{amount}}</td>
+        <td style="border: 1px solid black">{{tx}}</td>
+    </tr>
+</table>
+<b>Destination Address:</b>
+<details>{dest}</details>
+<br/>
+<b>Amount:</b>
+<details>{amount} BTC</details>
+<br/>
+<b>TX:</b>
+<details>{tx}</details>
+<br/>
+<br/>
+<h2>
+    <u>ETH Transaction Details</u>{ethfl}</h2>
+<br/>
+<b>Destination Address:</b>
+<details>{to_address}</details>
+<br/>
+<b>Amount:</b>
+<details>{ethamount} ETH</details>
+<br/>
+<b>TX:</b>
+<details>{ethtx}</details>
+<br/>
+<br/>
+</HTML>

@@ -91,7 +91,8 @@ def hello():
         #    "<b>Private Key:</b> {Bsk}<br/>" \
         #    "<b>Address:</b> {Badd}<br/><br/>" \
         #    "<b>Visits:</b> {visits}"
-    #return html.format(hostname=socket.gethostname(), visits=visits, dest=dest, amount=amount, tx=tx, btcfl=btcfl, to_address=to_address, ethamount=ethamount, ethtx=ethtx, ethfl=ethfl)
+    return render_template('home.html',hostname=socket.gethostname(), btcs=btcs, eths=eths, visits=visits, dest=dest, amount=amount, tx=tx, btcfl=btcfl, to_address=to_address, ethamount=ethamount, ethtx=ethtx, ethfl=ethfl)
+    # return html.format(hostname=socket.gethostname(), btcs=btcs, eths=eths, visits=visits, dest=dest, amount=amount, tx=tx, btcfl=btcfl, to_address=to_address, ethamount=ethamount, ethtx=ethtx, ethfl=ethfl)
     # pk=pk, ad=ad, sk=sk, Bpk=Bpk, Bsk=Bsk, Badd=Badd,
 
 if __name__ == "__main__":
