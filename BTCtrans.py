@@ -20,13 +20,13 @@ import random
 # print("SUCCESS!")
 # key.send(outputs, fee=8500, unspents=unspents)
 
-def BTC_process(destination, priv_wif, fee):
+def BTC_process(destination, priv_wif, fee, amnt):
     ntwrk = NetworkAPI()
     f = fee
     dest = destination
     key = PrivateKeyTestnet(priv_wif)
     org = key.address
-    amnt = float(random.randrange(1, 500))/100
+    #amnt = float(random.randrange(1, 500))/100
     unspents = ntwrk.get_unspent_testnet(org)
     outputs = [(dest, amnt, 'mbtc')]
     tx = key.create_transaction(outputs, fee=f, unspents=unspents)

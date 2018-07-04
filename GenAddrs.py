@@ -43,6 +43,3 @@ def full_wallets(eth_num, btc_num):
     print("Serving up some BTC B-style brovis")
 
     return (btc_addrs, eth_addrs)
-
-full_wallets(50, 50)
-
