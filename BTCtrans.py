@@ -30,7 +30,7 @@ def BTC_process(destination, priv_wif, fee, amnt):
     unspents = ntwrk.get_unspent_testnet(org)
     outputs = [(dest, amnt, 'mbtc')]
     tx = key.create_transaction(outputs, fee=f, unspents=unspents)
-    # ntwrk.broadcast_tx_testnet(tx)
+    ntwrk.broadcast_tx_testnet(tx)
     receipt = ntwrk.get_transactions_testnet(dest)
     return receipt
 # def get_unspent_testnet(cls, address)

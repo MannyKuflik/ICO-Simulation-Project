@@ -12,16 +12,6 @@
 <p align="center" style="margin: 0">By Lawrence Li and Emanuel Kuflik</p>
 <br/>
 
-<table>
-        {% for DataSet in arr %}
-        <tr>
-        <td>{{ DataSet.address }}</td>
-        <td>{{ DataSet.amount }}</td>
-        <td>{{ DataSet.txhash }}</td>
-        </tr>
-        {% endfor %}
-</table>
-
 <!-- <h2>
     <u>BTC Transaction Details</u>{btcfl}</h2>
 <br/> -->
@@ -37,15 +27,19 @@
         <th style="word-break: break-all; width: 75;border: 1px solid black; color: snow; background-color: rgb(255, 123, 0)">Amount</th>
         <th style="word-break: break-all; border: 1px solid black; color: snow; background-color: rgb(255, 94, 0)">TX Hash</th>
     </tr>
+
+    {% for DataSet in btc_trans %}
     <tr>
+        
         <td style="word-break: break-all; border: 1px solid black; background-color: rgba(255, 145, 0, .4)">
-            <div style="font-size: 15px">{{dest}}</div>
+            <div style="font-size: 15px">{{DataSet.address}}</div>
         </td>
-        <td style="word-break: break-all; border: 1px solid black; background-color: rgb(255, 123, 0, .4)">{{amount}} BTC</td>
+        <td style="word-break: break-all; border: 1px solid black; background-color: rgb(255, 123, 0, .4)">{{DataSet.amount}} BTC</td>
         <td style="word-break: break-all; border: 1px solid black; background-color: rgb(255, 94, 0, .4)">
-            <div style="font-size: 14px">{{tx}}</div>
+            <div style="font-size: 14px">{{DataSet.txhash}}</div>
         </td>
     </tr>
+    {% endfor %}
 </table>
 <!-- <b>Destination Address:</b>
 <details>{dest}</details>
@@ -70,16 +64,18 @@
         <th style="word-break: break-all; border: 1px solid black; color: snow; background-color: blue">Amount</th>
         <th style="word-break: break-all; border: 1px solid black; color: snow; background-color: navy">TX Hash</th>
     </tr>
+    {% for DataSet in eth_trans %}
     <tr>
         <td style="word-break: break-all; border: 1px solid black; background-color: rgba(70, 131, 180, 0.4)">
-            <div style="font-size: 15px">{{to_address}}</div>
+            <div style="font-size: 15px">{{DataSet.address}}</div>
         </td>
-        <td style="word-break: break-all; border: 1px solid black; background-color:  rgba(0, 0, 255, 0.4)">{{ethamount}} ETH</td>
+        <td style="word-break: break-all; border: 1px solid black; background-color:  rgba(0, 0, 255, 0.4)">{{DataSet.amount}} ETH</td>
         <td style="word-break: break-all; border: 1px solid black; background-color: rgba(0, 0, 128, 0.4)">
             <font size="1">
-                <div style="font-size: 14px">{{ethtx}}</div>
+                <div style="font-size: 14px">{{DataSet.txhash}}</div>
         </td>
     </tr>
+    {% endfor %}
 </table>
 
 <br/>
