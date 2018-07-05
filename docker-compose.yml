@@ -1,28 +1,39 @@
+# version: '3'
+# services:
+#   web:
+#     build: .
+#     deploy:
+#       replicas: 5
+#       resources:
+#         limits:
+#           cpus: "0.1"
+#           memory: 50M
+#       restart_policy:
+#         condition: on-failure
+#     links:
+#      - db
+#     ports:
+#      - "5004:80"
+#     volumes:
+#      - .:/code
+#   db:
+#     image: mysql:5.7
+#     ports:
+#       - "32000:3306"
+#     host:
+#       - localhost
+#     environment:
+#       MYSQL_ROOT_PASSWORD: HorcruX8!
+#     volumes:
+#       - ./db:/docker-entrypoint-initdb.d/:ro
+
 version: '3'
 services:
   web:
     build: .
-    deploy:
-      replicas: 5
-      resources:
-        limits:
-          cpus: "0.1"
-          memory: 50M
-      restart_policy:
-        condition: on-failure
-    links:
-     - db
     ports:
-     - "5004:80"
+     - "5050:80"
     volumes:
      - .:/code
-  db:
-    image: mysql:5.7
-    ports:
-      - "32000:3306"
-    host:
-      - localhost
-    environment:
-      MYSQL_ROOT_PASSWORD: HorcruX8!
-    volumes:
-      - ./db:/docker-entrypoint-initdb.d/:ro
+  redis:
+    image: "redis:alpine"

@@ -17,13 +17,13 @@ app = Flask(__name__)
 web3 = Web3(HTTPProvider('https://rinkeby.infura.io/UVgPTn3TgFMB0KhHUlif'))
 # if web3.isConnected():
      # print('connected to ', 'https://rinkeby.infura.io/UVgPTn3TgFMB0KhHUlif')
-
-def construct_tx(from_addr, to_address, val):
+def construct_tx(from_addr, to_address, val, nonce):
     if not web3.isChecksumAddress(to_address):
         print('pls use checksummed address')
         return False
+    unique = nonce
     txparams = {
-        'nonce': web3.eth.getTransactionCount(from_addr),
+        'nonce': unique,
         'chainId': 4,  # chainID for rinkeby
         'to': to_address,
         'data': '',
@@ -33,8 +33,8 @@ def construct_tx(from_addr, to_address, val):
     }
     return txparams
 
-def send_eth(from_addr, to_address, val, priv_key):
-    tx = construct_tx(from_addr, to_address, val) # this generates the transaction dict
+def send_eth(from_addr, to_address, val, priv_key, nonce):
+    tx = construct_tx(from_addr, to_address, val, nonce) # this generates the transaction dict
     # print(tx)
 
     web3.eth.enable_unaudited_features()
