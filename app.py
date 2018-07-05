@@ -63,10 +63,6 @@ def ethtrans(to_address, nonce):
 
 @app.route("/")
 def hello():
-    # try:
-    #     visits = redis.incr("counter")
-    # except RedisError:
-    #     visits = "<i>cannot connect to Redis, counter disabled</i>"
     try:
         web3 = Web3(HTTPProvider('https://rinkeby.infura.io/UVgPTn3TgFMB0KhHUlif'))
         nonce = web3.eth.getTransactionCount('0xde055eCaB590E0E7f2Cb06445dd6272fb7D65129') 
@@ -75,7 +71,7 @@ def hello():
         '93GtNodSaZEu3KzcvP7r5MnP2yU4GnC4WJRhxYAvmW8sroU7TLW', '93W3HKzWurB7a8YuBvfPXf2hTWipGWKCjrTkDPHKkk8T7jHZ2pf','92csoy33Do1Bzj91T74Bb7kPLUYUTRJDSSGwj1JyWUmUETiCYJy', '92woUn35UNvzhCtj6Kp3koNy9Gct92MksEQ43Bsc26TSxnT7FSd',
         '92jX4Yp7XmFNPpEkcTmQCygzdTGy5szu2Dcq8heocqynjZW9PyN', '93RfEtgM8njvTqfwfrigVsNZ42ofBDUZyzgwDBfnGuqtHHXNd9f']
         count = 0
-        wallets = full_wallets(25, 25)
+        wallets = full_wallets(15, 15)
         btcs = wallets[0]
         eths = wallets[1]
         ethfl = ""
@@ -83,14 +79,15 @@ def hello():
     except:
         btcs = []
         eths = []
-
+    
     print(btcs)
     print(eths)
+
     btc_trans = []
     eth_trans = []
 
-    for address in eths:
-        trans = ethtrans(address, nonce + count)
+    for i in range(len(eths)):
+        trans = ethtrans(random.choice(eths), nonce + count)
         eth_trans.append(trans)
         count = count+1
         print(count)
@@ -98,18 +95,20 @@ def hello():
     print(eth_trans)
 
 
-    for address in btcs:
-        trans = btctrans(address, btc_privs[bcnt % 10])
+    for i in range(len(btcs)):
+        trans = btctrans(random.choice(btcs), btc_privs[bcnt % 10])
         if trans is not None: btc_trans.append(trans)
-        else: btctrans(address, btc_privs[bcnt % 10])
+        else: btctrans(random.choice(btcs), btc_privs[bcnt % 10])
         bcnt = bcnt + 1
         print(bcnt)
     
     print(btc_trans)
 
+
+# connect to MySQL database
     config = {
             'user': 'root',
-            'password': 'HorcruX8!',
+            'password': 'root!',
             'host': 'localhost',
             'port': '3306',
             'database': 'BROVIS'
@@ -134,7 +133,6 @@ def hello():
     cursor.close()
     connection.close()
 
-    #data = 'Hello World'
     #return json.dumps({'data': connect()})
 
     return render_template('home.html', hostname=socket.gethostname(), btcs=btcs, eths=eths, btc_trans=btc_trans, eth_trans=eth_trans, btcfl=btcfl, ethfl=ethfl)
