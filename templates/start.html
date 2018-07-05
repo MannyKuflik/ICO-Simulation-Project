@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<b>Hostname:</b> {hostname}
+<br/>
+<br/>
+<h1 align="center" style="margin: 0">
+    <u>
+        <b>ICO SIMULATION SERVICE</b>
+    </u>
+</h1>
+<p align="center" style="margin: 0">By Lawrence Li and Emanuel Kuflik</p>
+<br/>
+<br/>
+<hr>
+<br/>
+<h2>About the Program</h2>
+
+<script>
+    // 10 minutes from now
+    var time_in_minutes = .1;
+    var current_time = Date.parse(new Date());
+    var deadline = new Date(current_time + time_in_minutes * 60 * 1000);
+
+
+    function time_remaining(endtime) {
+        var t = Date.parse(endtime) - Date.parse(new Date());
+        var seconds = Math.floor((t / 1000) % 60);
+        var minutes = Math.floor((t / 1000 / 60) % 60);
+        var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
+        var days = Math.floor(t / (1000 * 60 * 60 * 24));
+        return { 'total': t, 'days': days, 'hours': hours, 'minutes': minutes, 'seconds': seconds };
+    }
+    function run_clock(button, id, endtime) {
+        button.style.display = "none";
+        var clock = document.getElementById(id);
+        function update_clock() {
+            var t = time_remaining(endtime);
+            clock.innerHTML = 'Approx. Time Remaining: <div style="color: red">' + t.minutes + ' m ' + t.seconds + ' s' + '<div>';
+            if (t.total <= 0) {
+                clock.innerHTML = '<form align="left" action="/"> <button style="font-size: 12px" type="submit" >Restart</button></form><form align="center" action="/run/" method="post"> <button style="font-size: 24px" type="submit" >View Simulation</button></form>'
+            }
+        }
+        update_clock(); // run function once at first to avoid delay
+        var timeinterval = setInterval(update_clock, 1000);
+    }
+// run_clock('clockdiv',deadline);
+</script>
+
+<form align="center" action="/run/" method="post">
+<button style="font-size: 24px" type="submit" onclick="run_clock(this, 'clockdiv',deadline)">View Simulation</button>
+</form>
+
+<div id="clockdiv"></div>
+
+</html>

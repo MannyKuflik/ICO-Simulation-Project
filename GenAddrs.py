@@ -20,7 +20,7 @@ def gen_btc(index):
     address = new_node.address()
     return address
 
-XPUB_btc = "tpubDAQgEY88bKm3x6MgnNeZbGqhS1D2ZsvZrG5MMnyVw9aXvWjq4oLiGSH2XXKXUq4YVtunYAiqkM2rKwRY9aU2Nin2Hf2pHco2rRuVXfkM93J"
+XPUB_btc = "tpubDAK3K7sXsKqVs6XNCnBUZQVj2Yy5Sc98XV4Sy9xVfTcaGv8AGm4x585DUYpbBx61zURUoyFsJWAokuZY8Edm5PqJ9wza7i4pxVPKCttKjZH"
 
 wallet_account0_btc = BIP32Node.from_hwif(XPUB_btc)
 wallet_btc = wallet_account0_btc.subkey(0)

@@ -12,34 +12,37 @@ import time
 from math import log10, floor
 from models import BTC, ETH
 
-app = Flask(__name__)
+from web3 import Web3, HTTPProvider, utils
 
-web3 = Web3(HTTPProvider('https://rinkeby.infura.io/UVgPTn3TgFMB0KhHUlif'))
-nonce = web3.eth.getTransactionCount('0xde055eCaB590E0E7f2Cb06445dd6272fb7D65129')
+
+app = Flask(__name__)
 
 def round_sig(x, sig):
     return round(x, sig-int(floor(log10(abs(x))))-1)
     
-def btctrans(dest):
+def btctrans(dest, priv):
     try: 
-        amnt = float(random.randrange(1, 500))/100
+        amnt = float(random.randrange(1, 500))/1000000
         #dest = 'mrHXbzTszNWhav7egmfXVktopTBMotS4mp'
-        amount = round_sig((amnt/10000), 4) 
-        fee = 200
-        tx = BTC_process(dest, '93NUtNNeKfpPZTtB6dEBxjPhBBs8ksYZnHh26RuB8Xe9QUychy6', fee, amnt)
-        btx = tx[-1]
-        btcfl = ""
-        #print(btx)
-        return BTC(dest, amount, btx)
+        amount = round_sig((amnt/1000), 4) 
+        fee = 5
+        tx = BTC_process(destination=dest, priv_wif=priv, fee=fee, amnt=amnt) 
+        txhash=tx[0] 
+        bit = BTC(dest, amount, txhash)
+        return bit
     except:
-        btctrans(dest)
+        print('failed attempt')
+        btctrans(dest, priv)
+    
         # tx = "unable to make transaction"
         # amount = "N/A"
         # dest = "unable to make transaction"
         # btcfl = "(Failed)"
-        # return BTC('fail', 'fail', 'fail')
+        # raise
+        # raise
+        # return BTC('fail', 'N/A', 'fail')
 
-def ethtrans(to_address):
+def ethtrans(to_address, nonce):
     try:
         val = random.randint(10000, 10000000)
         ethamount = round_sig((val / (10**18)), 4)
@@ -47,16 +50,16 @@ def ethtrans(to_address):
         #to_address = '0x6F544455D57caA0787A5200DA1FC379fc00B5Da5'
         priv_key = '8c70afd6be9a772cd1fe852c411cc67b829f402c733a45d27b9b8eb6b9710dc4'
         ethtx = send_eth(from_address, to_address, val, priv_key, nonce)
-        ethfl = ''
-        #print(ethtx)
         return ETH(to_address, ethamount, ethtx)
     except:
-        ethtrans(to_address)
+        print('failed attempt')
+        ethtrans(to_address, nonce) 
         # ethtx = "unable to make transaction"
         # val = "unable to make transaction"
         # to_address = "unable to make transaction"
         # ethfl = "(Failed)"
-        # return ETH('fail', 'fail', 'fail')
+        # raise
+        # return ETH('fail', 'N/A', 'fail')
 
 @app.route("/")
 def hello():
@@ -65,9 +68,18 @@ def hello():
     # except RedisError:
     #     visits = "<i>cannot connect to Redis, counter disabled</i>"
     try:
-        wallets = full_wallets(1, 1)
+        web3 = Web3(HTTPProvider('https://rinkeby.infura.io/UVgPTn3TgFMB0KhHUlif'))
+        nonce = web3.eth.getTransactionCount('0xde055eCaB590E0E7f2Cb06445dd6272fb7D65129') 
+        bcnt = 0
+        btc_privs = ['92b82iRG1kDJqXgdQx9D1sVskdg5ShXD6f7ggWoP5wLJas65U1j','93S6gfCcC9KeAJnH4Cihm1ohn6MoY5kW5JDBt9Jwg6DS6Y2WBii','92j5cnHrUQfehM8RE7mNwqFquPipj1ixvv6aTk1eDfcEvGQvhN7','92fxKDXkF97ku9PaSEcz3vKmyeTc9gQZCHFrGJVFGGJ5LkpSxQM',
+        '93GtNodSaZEu3KzcvP7r5MnP2yU4GnC4WJRhxYAvmW8sroU7TLW', '93W3HKzWurB7a8YuBvfPXf2hTWipGWKCjrTkDPHKkk8T7jHZ2pf','92csoy33Do1Bzj91T74Bb7kPLUYUTRJDSSGwj1JyWUmUETiCYJy', '92woUn35UNvzhCtj6Kp3koNy9Gct92MksEQ43Bsc26TSxnT7FSd',
+        '92jX4Yp7XmFNPpEkcTmQCygzdTGy5szu2Dcq8heocqynjZW9PyN', '93RfEtgM8njvTqfwfrigVsNZ42ofBDUZyzgwDBfnGuqtHHXNd9f']
+        count = 0
+        wallets = full_wallets(25, 25)
         btcs = wallets[0]
         eths = wallets[1]
+        ethfl = ""
+        btcfl = ""
     except:
         btcs = []
         eths = []
@@ -77,23 +89,24 @@ def hello():
     btc_trans = []
     eth_trans = []
 
-    for address in btcs:
-        print(address)
-        trans = btctrans(address)
-        btc_trans.append(trans)
-        #time.sleep(60)
-    
-    print(btc_trans)
-
     for address in eths:
-        print(address)
-        trans = ethtrans(address)
+        trans = ethtrans(address, nonce + count)
         eth_trans.append(trans)
-        time.sleep(2)
+        count = count+1
+        print(count)
 
     print(eth_trans)
 
-#def connect():
+
+    for address in btcs:
+        trans = btctrans(address, btc_privs[bcnt % 10])
+        if trans is not None: btc_trans.append(trans)
+        else: btctrans(address, btc_privs[bcnt % 10])
+        bcnt = bcnt + 1
+        print(bcnt)
+    
+    print(btc_trans)
+
     config = {
             'user': 'root',
             'password': 'HorcruX8!',
@@ -115,26 +128,17 @@ def hello():
                    "VALUES ('%s', '%s', '%s') " % (trans.address, trans.amount, trans.txhash)
                    )
         connection.commit()
-    cursor.execute('SELECT address, amount, txhash FROM bitcoin')
-    cursor.execute('SELECT address, amount, txhash FROM ethereum')
-    results = [[address, amount, txhash] for (address, amount, txhash) in cursor]
+    # cursor.execute('SELECT address, amount, txhash FROM bitcoin')
+    # cursor.execute('SELECT address, amount, txhash FROM ethereum')
+    # results = [[address, amount, txhash] for (address, amount, txhash) in cursor]
     cursor.close()
     connection.close()
-    print(results)
 
     #data = 'Hello World'
-    #connect()
     #return json.dumps({'data': connect()})
-    #return render_template('home.html',hostname=socket.gethostname(), btcs=btcs, eths=eths, dest=dest, amount=amount, tx=tx, btcfl=btcfl, to_address=to_address, ethamount=ethamount, ethtx=ethtx, ethfl=ethfl)
 
-#Testing
-    
-
-    return render_template('home.html', hostname=socket.gethostname(), btcs=btcs, eths=eths, btc_trans=btc_trans, eth_trans=eth_trans)
+    return render_template('home.html', hostname=socket.gethostname(), btcs=btcs, eths=eths, btc_trans=btc_trans, eth_trans=eth_trans, btcfl=btcfl, ethfl=ethfl)
     # return html.format(hostname=socket.gethostname(), btcs=btcs, eths=eths, visits=visits, dest=dest, amount=amount, tx=tx, btcfl=btcfl, to_address=to_address, ethamount=ethamount, ethtx=ethtx, ethfl=ethfl)
     # pk=pk, ad=ad, sk=sk, Bpk=Bpk, Bsk=Bsk, Badd=Badd,
-    #return render_template('home.html', data=data)
-
 if __name__ == "__main__":
-  #hello()
    app.run(host='0.0.0.0', port=80)

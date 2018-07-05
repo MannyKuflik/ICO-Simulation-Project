@@ -6,4 +6,4 @@ eth-utils
 pycoin
 bit
 web3
-mysql-connector
+# mysql-connector
