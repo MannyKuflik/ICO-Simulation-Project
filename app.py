@@ -108,7 +108,7 @@ def hello():
 # connect to MySQL database
     config = {
             'user': 'root',
-            'password': 'root!',
+            'password': 'root',
             'host': 'localhost',
             'port': '3306',
             'database': 'BROVIS'
