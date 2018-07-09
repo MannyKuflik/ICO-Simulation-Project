@@ -2,6 +2,7 @@ from flask import Flask, render_template
 from BTCtrans import BTC_process
 from ETHtrans import send_eth
 from GenAddrs import full_wallets
+from web3 import Web3, HTTPProvider, utils
 import os
 import json
 import socket  
@@ -72,10 +73,6 @@ def ethtrans(to_address, nonce):
 
 @app.route("/")
 def hello():
-    # try:
-    #     visits = redis.incr("counter")
-    # except RedisError:
-    #     visits = "<i>cannot connect to Redis, counter disabled</i>"
     try:
         web3 = Web3(HTTPProvider('https://rinkeby.infura.io/UVgPTn3TgFMB0KhHUlif'))
         nonce = web3.eth.getTransactionCount('0xde055eCaB590E0E7f2Cb06445dd6272fb7D65129') 
@@ -134,11 +131,11 @@ def hello():
         # print("Length:", l)
     
     for x in range(l):
-        # if (x < len(eths)):
-        #     etrans = ethtrans(eths[x], nonce + ecnt)
-        #     eth_trans.append(etrans)
-        #     ecnt = ecnt+1
-        #     print("ETH No.", ecnt)
+        if (x < len(eths)):
+            etrans = ethtrans(eths[x], nonce + ecnt)
+            eth_trans.append(etrans)
+            ecnt = ecnt+1
+            print("ETH No.", ecnt)
         if (x < len(btcs)):
             btrans = btctrans(btcs[x], btc_privs[bcnt % 20])
             btc_trans.append(btrans)
@@ -149,40 +146,54 @@ def hello():
     print('Done.')
 
 
-# def connect():
-#     config = {
-#             'user': 'root',
-#             'password': 'HorcruX8!',
-#             'host': 'localhost',
-#             'port': '3306',
-#             'database': 'BROVIS'
-#         }
-#     connection = mysql.connector.connect(**config)
-#     cursor = connection.cursor()
-#     cursor.execute("INSERT INTO bitcoin "
-#                    "(name, mission) "
-#                    "VALUES ('B-style', 'Brovis')")
-#     connection.commit()
-#     cursor.execute('SELECT name, mission FROM charity')
-#     results = [{name: mission} for (name, mission) in cursor]
-#     cursor.close()
-#     connection.close()
-#     print(results)
+    # for i in range(len(eths)):
+    #     trans = ethtrans(random.choice(eths), nonce + ecnt)
+    #     eth_trans.append(trans)
+    #     ecnt = ecnt+1
+    #     print(ecnt)
 
-    #data = 'Hello World'
-    #connect()
-    #return json.dumps({'data': connect()})
-    #return render_template('home.html',hostname=socket.gethostname(), btcs=btcs, eths=eths, dest=dest, amount=amount, tx=tx, btcfl=btcfl, to_address=to_address, ethamount=ethamount, ethtx=ethtx, ethfl=ethfl)
-
-#Testing
+    # for i in range(len(btcs)):
+    #     trans = btctrans(random.choice(btcs), btc_privs[bcnt % 10])
+    #     if trans is not None: btc_trans.append(trans)
+    #     else: btctrans(random.choice(btcs), btc_privs[bcnt % 10])
+    #     bcnt = bcnt + 1
+    #     print(bcnt)
     
+    # print(btc_trans)
+
+
+# connect to MySQL database
+    config = {
+            'user': 'root',
+            'password': 'root',
+            'host': 'localhost',
+            'port': '3306',
+            'database': 'BROVIS'
+        }
+    connection = mysql.connector.connect(**config)
+    cursor = connection.cursor()
+    for trans in btc_trans:
+        cursor.execute("INSERT INTO bitcoin "
+                   "(address, amount, txhash) "
+                   "VALUES ('%s', '%s', '%s') " % (trans.address, trans.amount, trans.txhash)
+                   )
+        connection.commit()
+    for trans in eth_trans:
+        cursor.execute("INSERT INTO ethereum "
+                   "(address, amount, txhash) "
+                   "VALUES ('%s', '%s', '%s') " % (trans.address, trans.amount, trans.txhash)
+                   )
+        connection.commit()
+    # cursor.execute('SELECT address, amount, txhash FROM bitcoin')
+    # cursor.execute('SELECT address, amount, txhash FROM ethereum')
+    # results = [[address, amount, txhash] for (address, amount, txhash) in cursor]
+    cursor.close()
+    connection.close()
+
+    #return json.dumps({'data': connect()})
 
     return render_template('home.html', hostname=socket.gethostname(), btcs=btcs, eths=eths, btc_trans=btc_trans, eth_trans=eth_trans, btcfl=btcfl, ethfl=ethfl)
     # return html.format(hostname=socket.gethostname(), btcs=btcs, eths=eths, visits=visits, dest=dest, amount=amount, tx=tx, btcfl=btcfl, to_address=to_address, ethamount=ethamount, ethtx=ethtx, ethfl=ethfl)
     # pk=pk, ad=ad, sk=sk, Bpk=Bpk, Bsk=Bsk, Badd=Badd,
-    #return render_template('home.html', data=data)
-#cProfile.run('hello()')
-
-
 if __name__ == "__main__":
    app.run(host='0.0.0.0', port=80)
