@@ -15,9 +15,32 @@
 <!-- <h2>
     <u>BTC Transaction Details</u>{btcfl}</h2>
 <br/> -->
-<table style="table-layout: fixed; width: 50%; float: left;  border: 1px solid black">
-    <col width="30%">
-    <col width="25%">
+<style>
+        a:link {
+            color: black;
+            background-color: transparent;
+            text-decoration: none;
+        }
+        a:visited {
+            color: black;
+            background-color: transparent;
+            text-decoration: none;
+        }
+        a:hover {
+            color: white;
+            background-color: transparent;
+            text-decoration: dotted;
+        }
+        a:active {
+            color: whitesmoke;
+            background-color: transparent;
+            text-decoration: underline;
+        }
+        </style>
+
+<table style="table-layout: fixed; width: 49%; float: left">
+    <col width="40%">
+    <col width="20%">
     <col width="40%">
     <tr>
         <th colspan="3"> BTC DATA {{btcfl}}</th>
@@ -25,18 +48,19 @@
     <tr>
         <th style="word-break: break-all; border: 1px solid black; color: snow; background-color: rgb(255, 145, 0)">Address</th>
         <th style="word-break: break-all; width: 75;border: 1px solid black; color: snow; background-color: rgb(255, 123, 0)">Amount</th>
-        <th style="word-break: break-all; border: 1px solid black; color: snow; background-color: rgb(255, 94, 0)">TX Hash</th>
+        <th style="word-break: break-all; border: 1px solid black; color: snow; background-color: rgb(255, 94, 0)">TX ID</th>
     </tr>
-
+    
     {% for DataSet in btc_trans %}
-    <tr>
-        
-        <td style="word-break: break-all; border: 1px solid black; background-color: rgba(255, 145, 0, .4)">
-            <div style="font-size: 15px">{{DataSet.address}}</div>
+
+    <tr style="padding-bottom: 5em">
+
+        <td onload="redirectTo()"   style="word-break: break-all; border: 1px solid black; background-color: rgba(255, 145, 0, .4)">
+            <a href="https://live.blockcypher.com/btc-testnet/address/{{DataSet.address}}" style="font-size: 15px">{{DataSet.address}}</a>
         </td>
         <td style="word-break: break-all; border: 1px solid black; background-color: rgb(255, 123, 0, .4)">{{DataSet.amount}} BTC</td>
         <td style="word-break: break-all; border: 1px solid black; background-color: rgb(255, 94, 0, .4)">
-            <div style="font-size: 14px">{{DataSet.txhash}}</div>
+            <a id="btc" href="https://testnet.blockchain.info/tx/{{DataSet.txhash}}" style="font-size: 14px">{{DataSet.txhash}}</a>
         </td>
     </tr>
     {% endfor %}
@@ -52,27 +76,29 @@
 <!-- <h2>
     <u>ETH Transaction Details</u>{ethfl}</h2>
 <br/> -->
-<table style="table-layout: fixed; float: left; width: 50%; border: 1px solid black">
-    <col width="35%">
-    <col width="25%">
+<div style="float: left; color: white;">$</div>
+<table style="table-layout: fixed; float: right; width: 49%; border: 1px solid black">
+    <col width="40%">
+    <col width="20%">
     <col width="40%">
     <tr>
         <th colspan="3"> ETH DATA {{ethfl}}</th>
     </tr>
     <tr>
-        <th style="word-break: break-all; border: 1px solid black; color: snow; background-color: steelblue">Address</th>
+        <th style="word-break: break-all; border: 1px solid black; color: snow; background-color: rgb(35, 79, 116)">Address</th>
         <th style="word-break: break-all; border: 1px solid black; color: snow; background-color: blue">Amount</th>
         <th style="word-break: break-all; border: 1px solid black; color: snow; background-color: navy">TX Hash</th>
     </tr>
     {% for DataSet in eth_trans %}
+
     <tr>
         <td style="word-break: break-all; border: 1px solid black; background-color: rgba(70, 131, 180, 0.4)">
-            <div style="font-size: 15px">{{DataSet.address}}</div>
+            <a href="https://rinkeby.etherscan.io/address/{{DataSet.address}}" style="font-size: 15px">{{DataSet.address}}</a>
         </td>
         <td style="word-break: break-all; border: 1px solid black; background-color:  rgba(0, 0, 255, 0.4)">{{DataSet.amount}} ETH</td>
         <td style="word-break: break-all; border: 1px solid black; background-color: rgba(0, 0, 128, 0.4)">
             <font size="1">
-                <div style="font-size: 14px">{{DataSet.txhash}}</div>
+                <a id="eth" href="https://rinkeby.etherscan.io/tx/{{DataSet.txhash}}" style="font-size: 14px">{{DataSet.txhash}}</a>
         </td>
     </tr>
     {% endfor %}

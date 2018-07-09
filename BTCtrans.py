@@ -1,8 +1,120 @@
-from bit.network.services import NetworkAPI
+from bit.network.services import NetworkAPI, BitpayAPI, InsightAPI
+from bit.transaction import calc_txid
 from bit import PrivateKeyTestnet
+from bit.network.meta import Unspent
+import requests
+import traceback
 
 import random 
+import time
 
+ntwrk = NetworkAPI()
+
+def BTC_process(destination, priv_wif, fee, amnt):
+    tx = None
+    key = None
+    outputs = None
+    url = None
+    payload = None
+    res = None
+    txid = None
+
+    s = requests.Session()
+    a = requests.adapters.HTTPAdapter(max_retries=100, pool_connections = 100000, pool_maxsize = 100000)
+    s.mount('https://', a)
+
+    key = PrivateKeyTestnet(priv_wif)
+    try:
+
+        url = 'https://testnet.blockexplorer.com/api/addr/' + key.address + '/utxo'
+
+        for i in range(100):
+            res = s.get(url)
+            if res.ok:
+                print('Unspents success')
+                data2 = res.json()[0]
+                v = int(float(data2['amount']) * (10**8))
+                unspents = [Unspent(v, data2['confirmations'], data2['scriptPubKey'], data2['txid'], data2['vout'])]
+                break  
+            else:
+                print('trying chain.so')
+                url = 'https://chain.so/api/v2/get_tx_unspent/BTCTEST/' + key.address
+                try:
+                    res = s.get(url)
+                    if res.ok:
+                        data = res.json()["data"]
+                        txs = data['txs'][0]
+                        v = int(float(txs['value']) * (10**8))  
+                        unspents = [Unspent(v, txs['confirmations'], txs['script_hex'], txs['txid'], txs['output_no'])] 
+                        print('chain.so unspents success')
+                        break
+                    else:
+                        print('trying bit')
+                        try:
+                            unspents = key.get_unspents()
+                            print('bit unspents success')
+                            break
+                        except:
+                            print("couldn't get unspents, retrying...")
+                except:
+                    print("couldn't get unspents, retrying...")
+    except:
+        print('Line 41, error getting unspents')
+        traceback.print_exc()
+        
+    outputs = [(destination, amnt, 'mbtc')]
+
+    try:
+        tx = key.create_transaction(outputs, fee=fee, unspents=unspents)
+    except:
+        print("Line 55, error creating transaction")
+        traceback.print_exc()
+
+    url = 'https://testnet.blockexplorer.com/api/tx/send'
+
+    try:
+        for i in range(100):
+
+
+            payload = {'rawtx': tx}
+            res3 = s.post(url, data=payload)
+            if res3.ok:
+                txid = res3.json()['txid']
+                print("broadcast success")
+                break
+            else:
+                print('trying chain.so')
+                url = 'https://chain.so/api/v2/send_tx/BTCTEST'
+                try:
+                    payload = {'network': 'BTCTEST', 'tx_hex': tx}
+                    res = s.post(url, data=payload)
+                    if res.ok:
+                        print('broadcast chain.so success')
+                        info = res.json()["data"]
+                        txid = info["txid"]
+                        break
+                    else:
+                        print('trying bit')
+                        try:
+                            ntwrk.broadcast_tx_testnet(tx)
+                            txid = calc_txid(tx)
+                            print('broadcast bit success')
+                            break
+                        except:
+                            print("couldn't broadcast, retrying...")
+                            time.sleep(10)
+                except:
+                        print("couldn't broadcast, retrying...")
+                        time.sleep(10)
+    except:
+        print("Line 118, error broadcasting")
+        traceback.print_exc()
+    
+    return txid
+
+
+
+#~~~~~~~ORIGINAL CODE~~~~~~~~~~~
 # ntwrk = NetworkAPI()
 # money = ntwrk.get_balance_testnet('myuUCjnJxRmCm6aC2gpmY2nyGGS29PApRx')
 # print(money) 
@@ -19,18 +131,16 @@ import random
 # stx = ntwrk.broadcast_tx_testnet(tx)
 # print("SUCCESS!")
 # key.send(outputs, fee=8500, unspents=unspents)
-
-def BTC_process(destination, priv_wif, fee, amnt):
-    ntwrk = NetworkAPI()
-    f = fee
-    dest = destination
-    key = PrivateKeyTestnet(priv_wif)
-    org = key.address
-    unspents = ntwrk.get_unspent_testnet(org)
-    outputs = [(dest, amnt, 'mbtc')]
-    key.send(outputs, fee=f, unspents=unspents)
-    receipt = ntwrk.get_transactions_testnet(dest)
-    return receipt
+ 
+#~~~~~~~~~~~~~BTC_PROCESSS V2~~~~~~~~~~~~~~~~~~
+    # unspents = key.get_unspents()
+    # org = key.address
+    # unspents = ntwrk.get_unspent_testnet(org)
+    # f = fee
+    # dest = destination
+    # outputs = [(dest, amnt, 'mbtc')]
+    # txid = key.send(outputs, fee=f, unspents=unspents)
+    # return txid
 
     #amnt = float(random.randrange(1, 500))/100
     # tx = key.create_transaction(outputs, fee=f, unspents=unspents)
@@ -49,10 +159,11 @@ def BTC_process(destination, priv_wif, fee, amnt):
 # tx2 = receipt2[-1]
 # print(tx1, '/n', tx2)
 
-# dest = 'n1THoWEzKuFvBxGYq74BVTTPFJ79zDyR8e'
-# priv = '93NUtNNeKfpPZTtB6dEBxjPhBBs8ksYZnHh26RuB8Xe9QUychy6'
+#~~~~~~~~~~~~~~FAUCET FILLING SCRIPT~~~~~~~~~~~~~~~~~~
+# dest = 'mooc3xfCXBEkkcnpTJfSiD66PghEJ2moG4'
+# priv = '93CvyqZUTsVtNeWLfne7ZbpnG5npHXrabHL3ifmPPXvCjW5DxV4'
 # fee = 5000
-# num = 5
+# num = 50000
 # BTC_process(dest, priv, fee, num)
 # print("Done")
 
