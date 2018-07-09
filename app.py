@@ -1,13 +1,13 @@
 from flask import Flask, render_template
 from BTCtrans import BTC_process
 from ETHtrans import send_eth
-from GenAddrs import full_wallets
+from GenAddrs import full_wallets, xpub_eth, XPUB_btc
 from web3 import Web3, HTTPProvider, utils
 import os
 import json
 import socket  
 import random
-import mysql.connector
+# import mysql.connector
 import time
 from math import log10, floor
 from models import BTC, ETH
@@ -84,7 +84,7 @@ def hello():
         '92n9L6a18VHqnRbSSJBGghVr824D3BYBkY2uXZ3zdNvsQfrFEcm', '92cSm5MgrkwA2GQvhrBAvcDyUtTHzyLCpxjrcTmJNRXRXvRobuF', '931k5SpzC5nU72fME3kjXSbxpgytsSvTXnecNRqz6kNTyxHbTWP', '93QHiDUX5rakPKTNaD78A2Hn3CgMjsTWGuCwd6MjnosCs85QjTw']
         bcnt = 0
         ecnt = 0
-        wallets = full_wallets(500, 20)
+        wallets = full_wallets(300, 300)
         btcs = wallets[0]
         eths = wallets[1]
         ethfl = ""
@@ -163,32 +163,33 @@ def hello():
 
 
 # connect to MySQL database
-    config = {
-            'user': 'root',
-            'password': 'root',
-            'host': 'localhost',
-            'port': '3306',
-            'database': 'BROVIS'
-        }
-    connection = mysql.connector.connect(**config)
-    cursor = connection.cursor()
-    for trans in btc_trans:
-        cursor.execute("INSERT INTO bitcoin "
-                   "(address, amount, txhash) "
-                   "VALUES ('%s', '%s', '%s') " % (trans.address, trans.amount, trans.txhash)
-                   )
-        connection.commit()
-    for trans in eth_trans:
-        cursor.execute("INSERT INTO ethereum "
-                   "(address, amount, txhash) "
-                   "VALUES ('%s', '%s', '%s') " % (trans.address, trans.amount, trans.txhash)
-                   )
-        connection.commit()
+    # config = {
+    #         'user': 'root',
+    #         'password': 'root',
+    #         'host': 'localhost',
+    #         'port': '3306',
+    #         'database': 'BROVIS'
+    #     }
+    # connection = mysql.connector.connect(**config)
+    # cursor = connection.cursor()
+    # for trans in btc_trans:
+    #     cursor.execute("INSERT INTO bitcoin "
+    #                "(address, amount, txhash) "
+    #                "VALUES ('%s', '%s', '%s') " % (trans.address, trans.amount, trans.txhash)
+    #                )
+    #     connection.commit()
+    # for trans in eth_trans:
+    #     cursor.execute("INSERT INTO ethereum "
+    #                "(address, amount, txhash) "
+    #                "VALUES ('%s', '%s', '%s') " % (trans.address, trans.amount, trans.txhash)
+    #                )
+    #     connection.commit()
+    
+    # cursor.close()
+    # connection.close()
     # cursor.execute('SELECT address, amount, txhash FROM bitcoin')
     # cursor.execute('SELECT address, amount, txhash FROM ethereum')
     # results = [[address, amount, txhash] for (address, amount, txhash) in cursor]
-    cursor.close()
-    connection.close()
 
     #return json.dumps({'data': connect()})
 
@@ -196,4 +197,4 @@ def hello():
     # return html.format(hostname=socket.gethostname(), btcs=btcs, eths=eths, visits=visits, dest=dest, amount=amount, tx=tx, btcfl=btcfl, to_address=to_address, ethamount=ethamount, ethtx=ethtx, ethfl=ethfl)
     # pk=pk, ad=ad, sk=sk, Bpk=Bpk, Bsk=Bsk, Badd=Badd,
 if __name__ == "__main__":
-   app.run(host='0.0.0.0', port=80)
+   app.run(host='0.0.0.0', port=80, use_reloader=False, debug=True)

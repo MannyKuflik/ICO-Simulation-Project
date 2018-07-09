@@ -1,118 +1,205 @@
 <!DOCTYPE html>
-<HTML>
-    
-<br/>
-<br/>
-<h1 align="center" style="margin: 0">
-    <u>
-        <b>ICO SIMULATION SERVICE</b>
-    </u>
-</h1>
-<p align="center" style="margin: 0">By Lawrence Li and Emanuel Kuflik</p>
-<br/>
+<HTML style="background-color: black">
 
-<!-- <h2>
-    <u>BTC Transaction Details</u>{btcfl}</h2>
-<br/> -->
-<style>
+<head>
+    <title>Flask app</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+    <style>
+        #header-fixed {
+            position: fixed;
+            top: 0px;
+            display: none;
+            background-color: white;
+        }
+
+
         a:link {
-            color: black;
+            color: rgb(200, 200, 200);
             background-color: transparent;
             text-decoration: none;
         }
+
         a:visited {
-            color: black;
+            color: rgb(200, 200, 200);
             background-color: transparent;
             text-decoration: none;
         }
+
         a:hover {
             color: white;
             background-color: transparent;
             text-decoration: dotted;
         }
+
         a:active {
             color: whitesmoke;
             background-color: transparent;
             text-decoration: underline;
         }
-        </style>
 
-<table style="table-layout: fixed; width: 49%; float: left">
-    <col width="40%">
-    <col width="20%">
-    <col width="40%">
-    <tr>
-        <th colspan="3"> BTC DATA {{btcfl}}</th>
-    </tr>
-    <tr>
-        <th style="word-break: break-all; border: 1px solid black; color: snow; background-color: rgb(255, 145, 0)">Address</th>
-        <th style="word-break: break-all; width: 75;border: 1px solid black; color: snow; background-color: rgb(255, 123, 0)">Amount</th>
-        <th style="word-break: break-all; border: 1px solid black; color: snow; background-color: rgb(255, 94, 0)">TX ID</th>
-    </tr>
-    
-    {% for DataSet in btc_trans %}
+        #navbar {
+            overflow: hidden;
+            background-color: rgb(53, 41, 37);
+            border-radius: 15px;
+            width: 100%;
+        }
 
-    <tr style="padding-bottom: 5em">
+        #navbar a {
+            float: left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+        #navbar2 {
+            overflow: hidden;
+            background-color: rgb(45, 45, 58);
+            border-radius: 15px;
+            width: 100%;
+        }
 
-        <td onload="redirectTo()"   style="word-break: break-all; border: 1px solid black; background-color: rgba(255, 145, 0, .4)">
-            <a href="https://live.blockcypher.com/btc-testnet/address/{{DataSet.address}}" style="font-size: 15px">{{DataSet.address}}</a>
-        </td>
-        <td style="word-break: break-all; border: 1px solid black; background-color: rgb(255, 123, 0, .4)">{{DataSet.amount}} BTC</td>
-        <td style="word-break: break-all; border: 1px solid black; background-color: rgb(255, 94, 0, .4)">
-            <a id="btc" href="https://testnet.blockchain.info/tx/{{DataSet.txhash}}" style="font-size: 14px">{{DataSet.txhash}}</a>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
-<!-- <b>Destination Address:</b>
-<details>{dest}</details>
+        #navbar2 a {
+            float: left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+
+        .content {
+            padding: 16px;
+        }
+
+        .sticky {
+            position: fixed;
+            top: 0;
+            width: 30%;
+            max-width: 600px;
+            float: left;
+        }
+        .sticky2 {
+            position: fixed;
+            top: 0;
+            width: 30%;
+            max-width: 600px;
+            float: right;
+        }
+
+        .sticky+.content {
+            padding-top: 60px;
+        }
+    </style>
+</head>
+
 <br/>
-<b>Amount:</b>
-<details>{{amount}} BTC</details>
 <br/>
-<b>TX:</b>
-<details>{tx}</details> -->
+<h1 align="center" style="margin: 0">
+    <u>
+        <b style="color: white">ICO SIMULATION SERVICE</b>
+    </u>
+</h1>
+<p align="center" style="color: gainsboro; margin: 0">By Lawrence Li and Emanuel Kuflik</p>
+<br/>
+
+<body>
+    <table style="width: 100%">
+        <col width="48%">
+        <col width="4%">
+        <col width="48%">
+        <tr>
+            <td>
+                <div id="navbar" style="margin-bottom: 8px">
+                    <a align="left" style="text-align: left; width: 28%">Bitcoin Address</a>
+                    <a align="left" style="text-align: left; width: 13%">Amount</a>
+                    <a align="left" style="text-align: left; width: 15%">Tx ID</a>
+                    <a><img src= "https://en.bitcoin.it/w/images/en/2/29/BC_Logo_.png" height="22px"/></a>
+                </div>
+
+                <div id="btc" class="datagrid" style=" background-color: rgb(114, 56, 36)">
+                    <table id="table-1">
+                        <col width="32%">
+                        <col width="20%">
+                        <col width="48%">
+                        <tbody>
+                            {% for DataSet in btc_trans %}
+                            <tr>
+                                <td style="word-break: break-all;">
+                                    <a href="https://live.blockcypher.com/btc-testnet/address/{{DataSet.address}}">{{DataSet.address}}</a>
+                                </td>
+                                <td style="word-break: break-all;">{{DataSet.amount}} BTC</td>
+                                <td style="word-break: break-all;">
+                                    <a href="https://testnet.blockchain.info/tx/{{DataSet.txhash}}">{{DataSet.txhash}}</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </td>
+            <td>
+
+            </td>
+            <td>
+                <div id="navbar2" style="margin-bottom: 8px">
+                        <a align="left" style="text-align: left; width: 28%">Ethereum Address</a>
+                        <a align="left" style="text-align: left; width: 13%">Amount</a>
+                        <a align="left" style="text-align: left; width: 15%">Tx ID</a>
+                        <a><img src="http://introtocrypto.com/wp-content/uploads/2017/08/ether@2x.png" height="22px"/></a>
+                </div>
+
+                <div class="eth">
+                    <div>
+                        <div class="datagrid" style="color: white; background-color: rgb(67, 85, 126);">
+                            <table>
+                                <col width="32%">
+                                <col width="20%">
+                                <col width="48%">
+                                <tbody>
+                                    {% for DataSet in eth_trans %}
+                                    <tr>
+                                        <td style="word-break: break-all;">
+                                            <a href="https://rinkeby.etherscan.io/address/{{DataSet.address}}">{{DataSet.address}}</a>
+                                        </td>
+                                        <td style="word-break: break-all;">{{DataSet.amount}} ETH</td>
+                                        <td style="word-break: break-all;">
+                                            <a href="https://rinkeby.etherscan.io/tx/{{DataSet.txhash}}">{{DataSet.txhash}}</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+
+        <script>
+            window.onscroll = function () { myFunction() };
+
+            var navbar = document.getElementById("navbar");
+            var navbar2 = document.getElementById("navbar2");
+            var sticky = navbar.offsetTop;
+            var sticky2 = navbar2.offsetTop;
+
+            function myFunction() {
+                if (window.pageYOffset >= sticky) {
+                    navbar.classList.add("sticky")
+                    navbar2.classList.add("sticky2")
+                } else {
+                    navbar.classList.remove("sticky");
+                    navbar2.classList.remove("sticky2");
+                }
+            }
+        </script>
+</body>
 <!-- <h2>
-    <u>ETH Transaction Details</u>{ethfl}</h2>
+    <u>BTC Transaction Details</u>{btcfl}</h2>
 <br/> -->
-<div style="float: left; color: white;">$</div>
-<table style="table-layout: fixed; float: right; width: 49%; border: 1px solid black">
-    <col width="40%">
-    <col width="20%">
-    <col width="40%">
-    <tr>
-        <th colspan="3"> ETH DATA {{ethfl}}</th>
-    </tr>
-    <tr>
-        <th style="word-break: break-all; border: 1px solid black; color: snow; background-color: rgb(35, 79, 116)">Address</th>
-        <th style="word-break: break-all; border: 1px solid black; color: snow; background-color: blue">Amount</th>
-        <th style="word-break: break-all; border: 1px solid black; color: snow; background-color: navy">TX Hash</th>
-    </tr>
-    {% for DataSet in eth_trans %}
-
-    <tr>
-        <td style="word-break: break-all; border: 1px solid black; background-color: rgba(70, 131, 180, 0.4)">
-            <a href="https://rinkeby.etherscan.io/address/{{DataSet.address}}" style="font-size: 15px">{{DataSet.address}}</a>
-        </td>
-        <td style="word-break: break-all; border: 1px solid black; background-color:  rgba(0, 0, 255, 0.4)">{{DataSet.amount}} ETH</td>
-        <td style="word-break: break-all; border: 1px solid black; background-color: rgba(0, 0, 128, 0.4)">
-            <font size="1">
-                <a id="eth" href="https://rinkeby.etherscan.io/tx/{{DataSet.txhash}}" style="font-size: 14px">{{DataSet.txhash}}</a>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
-
 <br/>
-<!-- <b>Destination Address:</b>
-<details>{to_address}</details>
-<br/>
-<b>Amount:</b>
-<details>{{ethamount}} ETH</details>
-<br/>
-<b>TX:</b>
-<details>{{ethtx}}</details>
-<br/>
-<br/> -->
 
 </HTML>

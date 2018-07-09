@@ -1,0 +1,23 @@
+.eth .datagrid table { border-collapse: collapse; text-align: left; width: 100%; } 
+.eth .datagrid {font: normal 12px/150% Geneva, Arial, Helvetica, sans-serif; 
+    background: #fff; overflow: hidden; border: 4px solid black; border-radius: 15px; }
+.eth .datagrid table td, .eth .datagrid table th { padding: 0px 20px; }
+.eth .datagrid table thead th {padding: 10px 20px; border-bottom: 20px solid black; background-color:#0d185f; color:#FFFFFF; font-size: 17px; font-weight: bold} 
+.eth .datagrid table thead th:first-child { border: none; }
+.eth .datagrid table tbody td { color: rgb(200, 200, 200); font-size: 10px;  border-radius: 15px solid black; border-bottom: 10px solid black; font-weight: bold; }
+.eth .datagrid table tbody tr {overflow: hidden; border-radius: 15px solid black;}
+.eth .datagrid table tbody tr:hover{background-color: dodgerblue}
+.eth .datagrid table tbody td:first-child { border-left: none; }
+.eth .datagrid table tbody tr:last-child td { border-bottom: none; }
+
+#btc.datagrid table { border-collapse: collapse; text-align: left; width: 100%; } 
+#btc.datagrid {font: normal 12px/150% Geneva, Arial, Helvetica, sans-serif; 
+    background: #fff; overflow: hidden; border: 4px solid black; border-radius: 15px; }
+#btc.datagrid table td, .datagrid table th { padding: 0px 20px; }
+#btc.datagrid table thead th {padding: 10px 20px; border: 20px solid black; background-color:rgb(119, 15, 9); color:#FFFFFF; font-size: 17px; font-weight: bold;} 
+#btc.datagrid table thead th:first-child { border: none; }
+#btc.datagrid table tbody td { color: rgb(200, 200, 200); font-size: 10px;  border-radius: 15px solid black; border-bottom: 10px solid black; font-weight: bold; }
+#btc.datagrid table tbody tr { overflow: hidden;  border-radius: 15px solid black;}
+#btc.datagrid table tbody tr:hover{background-color: orangered}
+#btc.datagrid table tbody td:first-child { border-left: none; }
+#btc.datagrid table tbody tr:last-child td { border-bottom: none; }
