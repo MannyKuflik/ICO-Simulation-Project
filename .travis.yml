@@ -1,9 +1,10 @@
 language: python
 python:
-  '3.6'
+- '3.6'
 # env:
 #   DB=mysql
 services:
-  mysql
-install: pip install -r requirements.txt
-script: sudo python app.py
+- mysql
+install:
+- bash install/requirements/install-requirements.sh
+script: python app.py
