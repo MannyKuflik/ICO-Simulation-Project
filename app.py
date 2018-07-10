@@ -7,7 +7,7 @@ import os
 import json
 import socket  
 import random
-# import mysql.connector
+import mysql.connector
 import time
 from math import log10, floor
 from models import BTC, ETH
@@ -84,7 +84,7 @@ def hello():
         '92n9L6a18VHqnRbSSJBGghVr824D3BYBkY2uXZ3zdNvsQfrFEcm', '92cSm5MgrkwA2GQvhrBAvcDyUtTHzyLCpxjrcTmJNRXRXvRobuF', '931k5SpzC5nU72fME3kjXSbxpgytsSvTXnecNRqz6kNTyxHbTWP', '93QHiDUX5rakPKTNaD78A2Hn3CgMjsTWGuCwd6MjnosCs85QjTw']
         bcnt = 0
         ecnt = 0
-        wallets = full_wallets(300, 300)
+        wallets = full_wallets(50, 50)
         btcs = wallets[0]
         eths = wallets[1]
         ethfl = ""
@@ -163,30 +163,30 @@ def hello():
 
 
 # connect to MySQL database
-    # config = {
-    #         'user': 'root',
-    #         'password': 'root',
-    #         'host': 'localhost',
-    #         'port': '3306',
-    #         'database': 'BROVIS'
-    #     }
-    # connection = mysql.connector.connect(**config)
-    # cursor = connection.cursor()
-    # for trans in btc_trans:
-    #     cursor.execute("INSERT INTO bitcoin "
-    #                "(address, amount, txhash) "
-    #                "VALUES ('%s', '%s', '%s') " % (trans.address, trans.amount, trans.txhash)
-    #                )
-    #     connection.commit()
-    # for trans in eth_trans:
-    #     cursor.execute("INSERT INTO ethereum "
-    #                "(address, amount, txhash) "
-    #                "VALUES ('%s', '%s', '%s') " % (trans.address, trans.amount, trans.txhash)
-    #                )
-    #     connection.commit()
+    config = {
+            'user': 'root',
+            'password': 'HorcruX8!',
+            'host': 'localhost',
+            'port': '3306',
+            'database': 'BROVIS'
+        }
+    connection = mysql.connector.connect(**config)
+    cursor = connection.cursor()
+    for trans in btc_trans:
+        cursor.execute("INSERT INTO bitcoin "
+                   "(address, amount, txhash) "
+                   "VALUES ('%s', '%s', '%s') " % (trans.address, trans.amount, trans.txhash)
+                   )
+        connection.commit()
+    for trans in eth_trans:
+        cursor.execute("INSERT INTO ethereum "
+                   "(address, amount, txhash) "
+                   "VALUES ('%s', '%s', '%s') " % (trans.address, trans.amount, trans.txhash)
+                   )
+        connection.commit()
     
-    # cursor.close()
-    # connection.close()
+    cursor.close()
+    connection.close()
     # cursor.execute('SELECT address, amount, txhash FROM bitcoin')
     # cursor.execute('SELECT address, amount, txhash FROM ethereum')
     # results = [[address, amount, txhash] for (address, amount, txhash) in cursor]
