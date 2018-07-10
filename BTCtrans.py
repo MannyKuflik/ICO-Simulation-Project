@@ -134,20 +134,20 @@ def BTC_process(destination, priv_wif, fee, amnt):
             url = 'https://testnet.blockexplorer.com/api/addr/' + key.address + '/utxo'
             res = requests.get(url)
             if res.ok:
-                print('Unspents success')
+                # print('Unspents success')
                 data = res.json()[0]
                 v = int(float(data['amount']) * (10**8))
                 unspents = [Unspent(v, data['confirmations'], data['scriptPubKey'], data['txid'], data['vout'])]
                 outputs = [(destination, amnt, 'mbtc')]
                 tx = key.create_transaction(outputs, fee=fee, unspents=unspents)
-                print('transaction created')
+                # print('transaction created')
                 url = 'https://testnet.blockexplorer.com/api/tx/send'
                 payload = {'rawtx': tx}
                 res = requests.post(url, data=payload)
-
+ 
                 if res.ok:
                     txid = res.json()['txid']
-                    print("broadcast success")
+                    # print("broadcast success")
                     break
                 else:
                     print('failed to broadcast, restarting...')

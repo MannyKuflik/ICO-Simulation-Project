@@ -28,12 +28,12 @@ def btctrans(dest, priv):
         amount = round_sig((amnt/1000), 4) 
         fee = 5
         txhash = BTC_process(destination=dest, priv_wif=priv, fee=fee, amnt=amnt) 
+        if txhash is 'fail':
+            bit = BTC('Failed to send to ' + dest, 'N/A', 'Failed Tx')
+            return bit
         if txhash is not None: 
             bit = BTC(dest, amount, txhash)
             return bit
-        # else: 
-        #     print('No txid')
-        #     btctrans(dest, priv)
     except:
         print('failed attempt')
         raise
@@ -52,7 +52,6 @@ def ethtrans(to_address, nonce):
         val = random.randint(10000, 10000000)
         ethamount = round_sig((val / (10**18)), 4)
         from_address = '0xde055eCaB590E0E7f2Cb06445dd6272fb7D65129'
-        #to_address = '0x6F544455D57caA0787A5200DA1FC379fc00B5Da5'
         priv_key = '8c70afd6be9a772cd1fe852c411cc67b829f402c733a45d27b9b8eb6b9710dc4'
         ethtx = send_eth(from_address, to_address, val, priv_key, nonce)
         bit = ETH(to_address, ethamount, ethtx)
@@ -62,8 +61,10 @@ def ethtrans(to_address, nonce):
             ethtrans(to_address, nonce) 
     except:
         print('failed attempt') 
-        time.sleep(2)
-        ethtrans(to_address, nonce) 
+        raise
+        # time.sleep(2)
+        # ethtrans(to_address, nonce) 
+
         # ethtx = "unable to make transaction"
         # val = "unable to make transaction"
         # to_address = "unable to make transaction"
@@ -86,7 +87,7 @@ def hello():
         ecnt = 0
         wallets = full_wallets(50, 50)
         btcs = wallets[0]
-        eths = wallets[1]
+        eths = wallets[1] 
         ethfl = ""
         btcfl = ""
     except:
@@ -100,28 +101,10 @@ def hello():
         ethfl = "SYSTEM FAILURE"
         btcfl = "SYSTEM FAILURE"
 
-    # print(btcs)
-    # print(eths)
     btc_trans = []
     eth_trans = []
     master_priv = '93CvyqZUTsVtNeWLfne7ZbpnG5npHXrabHL3ifmPPXvCjW5DxV4'
 
-    # for address in eths:
-    #     etrans = ethtrans(address, nonce + ecnt)
-    #     eth_trans.append(etrans)
-    #     ecnt = ecnt+1
-    #     print(ecnt)
-
-    # print(eth_trans)
-
-    # for address in btcs:
-    #     btrans = btctrans(address, btc_privs[bcnt % 20])
-    #     if btrans is not None: btc_trans.append(btrans)
-    #     else: btctrans(address, btc_privs[bcnt % 20])
-    #     bcnt = bcnt + 1
-    #     print(bcnt)
- 
-    # print(btc_trans)
 
     if (len(btcs) >= len(eths)):
         l = len(btcs)
@@ -132,40 +115,23 @@ def hello():
     
     for x in range(l):
         if (x < len(eths)):
-            etrans = ethtrans(eths[x], nonce + ecnt)
+            etrans = ethtrans(random.choice(eths), nonce + ecnt)
             eth_trans.append(etrans)
             ecnt = ecnt+1
             print("ETH No.", ecnt)
         if (x < len(btcs)):
-            btrans = btctrans(btcs[x], btc_privs[bcnt % 20])
+            btrans = btctrans(random.choice(btcs), btc_privs[bcnt % len(btc_privs)])
             btc_trans.append(btrans)
             bcnt = bcnt + 1
             print("BTC No.", bcnt)
-    # print(eth_trans)
-    # print(btc_trans)
     print('Done.')
 
 
-    # for i in range(len(eths)):
-    #     trans = ethtrans(random.choice(eths), nonce + ecnt)
-    #     eth_trans.append(trans)
-    #     ecnt = ecnt+1
-    #     print(ecnt)
 
-    # for i in range(len(btcs)):
-    #     trans = btctrans(random.choice(btcs), btc_privs[bcnt % 10])
-    #     if trans is not None: btc_trans.append(trans)
-    #     else: btctrans(random.choice(btcs), btc_privs[bcnt % 10])
-    #     bcnt = bcnt + 1
-    #     print(bcnt)
-    
-    # print(btc_trans)
-
-
-# connect to MySQL database
+#connect to MySQL database
     config = {
             'user': 'root',
-            'password': 'HorcruX8!',
+            'password': '',
             'host': 'localhost',
             'port': '3306',
             'database': 'BROVIS'
@@ -174,14 +140,14 @@ def hello():
     cursor = connection.cursor()
     for trans in btc_trans:
         cursor.execute("INSERT INTO bitcoin "
-                   "(address, amount, txhash) "
-                   "VALUES ('%s', '%s', '%s') " % (trans.address, trans.amount, trans.txhash)
+                   "(address, amount, txhash, xpub) "
+                   "VALUES ('%s', '%s', '%s', '%s') " % (trans.address, trans.amount, trans.txhash, XPUB_btc)
                    )
         connection.commit()
     for trans in eth_trans:
         cursor.execute("INSERT INTO ethereum "
-                   "(address, amount, txhash) "
-                   "VALUES ('%s', '%s', '%s') " % (trans.address, trans.amount, trans.txhash)
+                   "(address, amount, txhash, xpub) "
+                   "VALUES ('%s', '%s', '%s', '%s') " % (trans.address, trans.amount, trans.txhash, xpub_eth)
                    )
         connection.commit()
     
@@ -191,7 +157,7 @@ def hello():
     # cursor.execute('SELECT address, amount, txhash FROM ethereum')
     # results = [[address, amount, txhash] for (address, amount, txhash) in cursor]
 
-    #return json.dumps({'data': connect()})
+    # return json.dumps({'data': connect()})
 
     return render_template('home.html', hostname=socket.gethostname(), btcs=btcs, eths=eths, btc_trans=btc_trans, eth_trans=eth_trans, btcfl=btcfl, ethfl=ethfl)
     # return html.format(hostname=socket.gethostname(), btcs=btcs, eths=eths, visits=visits, dest=dest, amount=amount, tx=tx, btcfl=btcfl, to_address=to_address, ethamount=ethamount, ethtx=ethtx, ethfl=ethfl)
