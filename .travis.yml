@@ -6,5 +6,5 @@ python:
 services:
 - mysql
 install:
-- bash install/requirements/requirements.txt
+- bash requirements.txt
 script: python app.py
