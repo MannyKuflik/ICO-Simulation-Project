@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+#from flask import Flask, render_template
 from BTCtrans import BTC_process
 from ETHtrans import send_eth
 from GenAddrs import full_wallets, xpub_eth, XPUB_btc
