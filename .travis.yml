@@ -3,9 +3,13 @@ language: python
 python:
   - 3.5
   - 3.6
+virtualenv:
+  - system_site_packages: true
 services:
   - mysql
 before_install:
+  - SITE_PKG_DIR=$VIRTUAL_ENV/lib/python$TRAVIS_PYTHON_VERSION/site-packages
+  - rm -f $VIRTUAL_ENV/lib/python$TRAVIS_PYTHON_VERSION/no-global-site-packages.txt
   - export PYTHONPATH=$PYTHONPATH:$(pwd)
 install:
   - pip install -r requirements.txt
