@@ -15,7 +15,6 @@ from models import BTC, ETH
 from web3 import Web3, HTTPProvider, utils
 import cProfile
 
-
 app = Flask(__name__)
 
 def round_sig(x, sig):
