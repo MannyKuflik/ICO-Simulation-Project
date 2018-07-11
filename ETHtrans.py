@@ -5,6 +5,7 @@ from web3 import Web3, HTTPProvider, utils
 import json
 import sys
 import random
+import time
 
 app = Flask(__name__)
 
@@ -27,20 +28,28 @@ def construct_tx(from_addr, to_address, val, nonce):
         'chainId': 4,  # chainID for rinkeby
         'to': to_address,
         'data': '',
-        'value': val,
+        'value': val, 
         'gas': 24000,
         'gasPrice': web3.eth.gasPrice
     }
     return txparams
 
 def send_eth(from_addr, to_address, val, priv_key, nonce):
+    a = time.time()
     tx = construct_tx(from_addr, to_address, val, nonce) # this generates the transaction dict
     # print(tx)
-
+    b = time.time()
+    c = time.time()
+    print('transaction construction: ', b-a)
     web3.eth.enable_unaudited_features()
-
+    d = time.time()
+    print('enable audited features: ', d-c)
+    e = time.time()
     signed_tx = web3.eth.account.signTransaction(tx, priv_key)  # this returns a blob of hexadecimal text
-
+    f = time.time()
+    print('sign tx: ', f-e)
+    g = time.time()
     transhash = web3.eth.sendRawTransaction(signed_tx.rawTransaction)  # this broadcasts the tx and returns a transaction hash
-
-    return web3.toHex(transhash)#web3.toHex(signed_tx.rawTransaction)
+    h = time.time()
+    print('send tx and get txid: ', h-g)
+    return web3.toHex(transhash) #web3.toHex(signed_tx.rawTransaction)
