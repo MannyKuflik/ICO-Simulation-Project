@@ -1,11 +1,8 @@
 language: python
 python:
   - 3.6
-services:
-  - mysql
 install:
-  - pip install -U pip
-  - sudo python3 -m pip install -r requirements.txt
+  - sudo pip3 install -r requirements.txt
   # - sudo pip install flask
   # - sudo pip install bit
 script: sudo python app.py
