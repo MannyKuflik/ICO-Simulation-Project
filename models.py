@@ -9,3 +9,9 @@ class ETH:
         self.address = address
         self.amount = amount
         self.txhash = txhash
+
+class BTCError(ValueError):
+    pass
+
+class ETHError(ValueError):
+    pass

@@ -1,10 +1,5 @@
 language: python
 python:
   - 3.6
-install:
-  - pip install -r requirements.txt
-  # - sudo pip install flask
-  # - sudo pip install bit
 script:
   - docker run -p 4000:80 mannykuf/simulation:v1
-  # - sudo python app.py

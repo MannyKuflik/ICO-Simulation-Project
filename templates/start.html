@@ -1,8 +1,5 @@
 <!DOCTYPE html>
 <html>
-<b>Hostname:</b> {hostname}
-<br/>
-<br/>
 <h1 align="center" style="margin: 0">
     <u>
         <b>ICO SIMULATION SERVICE</b>
@@ -15,7 +12,7 @@
 <br/>
 <h2>About the Program</h2>
 
-<script>
+<!-- <script>
     // 10 minutes from now
     var time_in_minutes = .1;
     var current_time = Date.parse(new Date());
@@ -43,13 +40,27 @@
         update_clock(); // run function once at first to avoid delay
         var timeinterval = setInterval(update_clock, 1000);
     }
-// run_clock('clockdiv',deadline);
-</script>
 
-<form align="center" action="/run/" method="post">
+</script> -->
+
+<!-- <form align="center" action="/run/" method="post">
 <button style="font-size: 24px" type="submit" onclick="run_clock(this, 'clockdiv',deadline)">View Simulation</button>
 </form>
 
-<div id="clockdiv"></div>
+<div id="clockdiv"></div> -->
+
+<form method="POST">
+    <br>
+        Enter Your BTC XPUB:
+        <input name="xpub_btc">
+    </br>
+    <br>
+        Enter Your ETH XPUB:
+        <input name="xpub_eth">
+    </br>
+    <br>
+        <input style="font-size: 24px" type="submit">
+    </br>
+</form>
 
 </html>

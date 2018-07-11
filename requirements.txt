@@ -6,3 +6,4 @@ pycoin
 bit
 web3
 mysql-connector==2.1.4
+pytest
