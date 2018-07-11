@@ -4,8 +4,8 @@ python:
 services:
   - mysql
 before_install:
-  - pip install flask
-  - pip install bit
+  - sudo pip install flask
+  - sudo pip install bit
 install:
   - pip install -r requirements.txt
 script: sudo python app.py
