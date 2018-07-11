@@ -3,9 +3,8 @@ python:
   - 3.6
 services:
   - mysql
-before_install:
-  - sudo pip install flask
-  - sudo pip install bit
 install:
   - pip install -r requirements.txt
+  - sudo pip install flask
+  - sudo pip install bit
 script: sudo python app.py
