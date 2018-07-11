@@ -1,6 +1,8 @@
 import eth_utils
 from pycoin.key.BIP32Node import BIP32Node
 import time
+from concurrent.futures import  ProcessPoolExecutor                                                               
+from multiprocessing import Pool, Process
 from models import BTCError, ETHError
 
 def getETHAddr(index, wallet_eth):
@@ -37,28 +39,66 @@ def gen_btc(index, wallet_btc):
 
 #     return (btc_addrs, eth_addrs)
 
-def full_wallets(btc_num, eth_num, xpub_btc, xpub_eth):
+# def full_wallets(btc_num, eth_num, xpub_btc, xpub_eth):
+#     try: 
+#         wallet_account0_btc = BIP32Node.from_hwif(xpub_btc)
+#         wallet_btc = wallet_account0_btc.subkey(0)
+#     except:
+#         print('invalid btc xpub')
+#         raise BTCError
+#         # return
+#     try: 
+#         node = BIP32Node.from_hwif(xpub_eth)
+#         wallet_eth = node.subkey(0)
+#     except: 
+#         print('invalid eth xpub')
+#         raise ETHError
+#         # return
+
+#     eth_addrs = []
+#     btc_addrs = []
+#     for i in range(eth_num):
+#         eth_addrs.append(getETHAddr(i, wallet_eth))
+#     print('got dat Eth boy')    
+#     for i in range(btc_num):
+#         btc_addrs.append(gen_btc(i, wallet_btc))
+#     print("Serving up some BTC B-style brovis")
+#     return (btc_addrs, eth_addrs)
+
+def run_simul(eth_num, btc_num, xpub_e, xpub_b):
+    with ProcessPoolExecutor(max_workers=2) as executor:
+        e = executor.submit(eth_wallet, eth_num, xpub_e)
+        b = executor.submit(btc_wallet, btc_num, xpub_b)
+    return ( b.result(), e.result())
+
+def eth_wallet(eth_num, xpub):
     try: 
-        wallet_account0_btc = BIP32Node.from_hwif(xpub_btc)
-        wallet_btc = wallet_account0_btc.subkey(0)
-    except:
-        print('invalid btc xpub')
-        raise BTCError
-        # return
-    try: 
-        node = BIP32Node.from_hwif(xpub_eth)
+        node = BIP32Node.from_hwif(xpub)
         wallet_eth = node.subkey(0)
     except: 
         print('invalid eth xpub')
         raise ETHError
-        # return
-
-    eth_addrs = []
-    btc_addrs = []
+    eth_addrs = []  
     for i in range(eth_num):
         eth_addrs.append(getETHAddr(i, wallet_eth))
-    print('got dat Eth boy')    
+    print('got dat Eth boy')  
+    return eth_addrs
+
+def btc_wallet(btc_num, xpub):
+    try: 
+        wallet_account0_btc = BIP32Node.from_hwif(xpub)
+        wallet_btc = wallet_account0_btc.subkey(0)
+    except: 
+        print('invalid btc xpub')
+        raise BTCError
+    btc_addrs = []  
     for i in range(btc_num):
         btc_addrs.append(gen_btc(i, wallet_btc))
     print("Serving up some BTC B-style brovis")
+    return btc_addrs
+
+def full_wallets(btc_num, eth_num, xpub_e, xpub_b):
+    addrs = run_simul(eth_num, btc_num, xpub_e, xpub_b)
+    btc_addrs = addrs[0]
+    eth_addrs = addrs[1]
     return (btc_addrs, eth_addrs)
