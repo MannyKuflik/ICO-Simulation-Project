@@ -27,13 +27,13 @@
 #     volumes:
 #       - ./db:/docker-entrypoint-initdb.d/:ro
 
-version: '3'
-services:
-  web:
-    build: .
-    ports:
-     - "5050:80"
-    volumes:
-     - .:/code
-  redis:
-    image: "redis:alpine"
+# version: '3'
+# services:
+#   web:
+#     build: .
+#     ports:
+#      - "5050:80"
+#     volumes:
+#      - .:/code
+#   redis:
+#     image: "redis:alpine"

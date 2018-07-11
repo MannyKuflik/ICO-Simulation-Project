@@ -1,9 +1,9 @@
 ecdsa
 pysha3
-Flask
-Redis
+flask
 eth-utils
 pycoin
 bit
 web3
 mysql-connector==2.1.4
+pytest

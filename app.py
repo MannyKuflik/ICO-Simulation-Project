@@ -1,7 +1,7 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from BTCtrans import BTC_process
 from ETHtrans import send_eth
-from GenAddrs import full_wallets, xpub_eth, XPUB_btc
+from GenAddrs import full_wallets
 from web3 import Web3, HTTPProvider, utils
 import mysql.connector  
 from concurrent.futures import  ProcessPoolExecutor                                                               
@@ -14,9 +14,7 @@ import socket
 import random
 import time
 from math import log10, floor
-from models import BTC, ETH
-
-
+from models import BTC, ETH, BTCError, ETHError
 
 app = Flask(__name__)                                                                                                  
 
@@ -45,6 +43,33 @@ def ethtrans(to_address, nonce):
         print('failed attempt') 
         raise
 
+def connect(btc_trans, eth_trans, xpub_eth, xpub_btc):
+    #connect to MySQL database
+    config = {
+            'user': 'root',
+            'password': 'HorcruX8!',
+            'host': 'localhost',
+            'port': '3306',
+            'database': 'BROVIS'
+        }
+    connection = mysql.connector.connect(**config)
+    cursor = connection.cursor()
+    for trans in btc_trans:
+        cursor.execute("INSERT INTO bitcoin "
+                   "(address, amount, txhash, xpub) "
+                   "VALUES ('%s', '%s', '%s', '%s') " % (trans.address, trans.amount, trans.txhash, xpub_btc)
+                   )
+        connection.commit()
+    for trans in eth_trans:
+        cursor.execute("INSERT INTO ethereum "
+                   "(address, amount, txhash, xpub) "
+                   "VALUES ('%s', '%s', '%s', '%s') " % (trans.address, trans.amount, trans.txhash, xpub_eth)
+                   )
+        connection.commit()
+    
+    cursor.close()
+    connection.close()
+
 def hellob(btcs):
     btc_privs = ['92b82iRG1kDJqXgdQx9D1sVskdg5ShXD6f7ggWoP5wLJas65U1j','93S6gfCcC9KeAJnH4Cihm1ohn6MoY5kW5JDBt9Jwg6DS6Y2WBii','92j5cnHrUQfehM8RE7mNwqFquPipj1ixvv6aTk1eDfcEvGQvhN7','92fxKDXkF97ku9PaSEcz3vKmyeTc9gQZCHFrGJVFGGJ5LkpSxQM',
         '93GtNodSaZEu3KzcvP7r5MnP2yU4GnC4WJRhxYAvmW8sroU7TLW', '93W3HKzWurB7a8YuBvfPXf2hTWipGWKCjrTkDPHKkk8T7jHZ2pf','92csoy33Do1Bzj91T74Bb7kPLUYUTRJDSSGwj1JyWUmUETiCYJy', '92woUn35UNvzhCtj6Kp3koNy9Gct92MksEQ43Bsc26TSxnT7FSd',
@@ -69,8 +94,8 @@ def hellob(btcs):
     return btc_trans
 
 def helloe(eths):
-    web3 = Web3(HTTPProvider('https://rinkeby.infura.io/UVgPTn3TgFMB0KhHUlif'))
-    nonce = web3.eth.getTransactionCount('0xde055eCaB590E0E7f2Cb06445dd6272fb7D65129')
+    web3 = Web3(HTTPProvider('https://rinkeby.infura.io/fP6CC5NSFDAcqMzWhPUe'))
+    nonce = web3.eth.getTransactionCount('0xde055eCaB590E0E7f2Cb06445dd6272fb7D65129') 
     ecnt = 0
     eth_trans = []
 
@@ -88,49 +113,36 @@ def run_simul(eths, btcs):
         b = executor.submit(hellob, btcs)
     return ( b.result(), e.result())
 
-@app.route("/")
-def hello():
+def hello(xpub_eth, xpub_btc):
     try:
-        xpub_b = "tpubDAK3K7sXsKqVs6XNCnBUZQVj2Yy5Sc98XV4Sy9xVfTcaGv8AGm4x585DUYpbBx61zURUoyFsJWAokuZY8Edm5PqJ9wza7i4pxVPKCttKjZH"
-        xpub_e = 'xpub6EPXZc2brBKKFUNH3bxcg17g5mi5Uo5YmHHe2j1dWqqzV5WEN8dQYWXSvFpXz1PNrW9G8de6qoPun3Eiz4qKmaLXmViVYEHmrXRF6JbQXUE'    
-        wallets = full_wallets(0, 50, xpub_e, xpub_b) 
-        btcs = wallets[0]
-        eths = wallets[1]
-        results = run_simul(eths, btcs)
-        btc_trans = results[0]
-        eth_trans = results[1]
-    except:
-        raise
-    # master_priv = '93CvyqZUTsVtNeWLfne7ZbpnG5npHXrabHL3ifmPPXvCjW5DxV4'
+        wallets = full_wallets(50, 50, xpub_eth, xpub_btc)
+    except BTCError:
+        print('invalid BTC XPUB')
+        return render_template('btcerror.html')
+    except ETHError:
+        print('invalid ETH XPUB')
+        return render_template('etherror.html')
+    btcs = wallets[0]
+    eths = wallets[1]
+    results = run_simul(eths, btcs)
+    btc_trans = results[0]
+    eth_trans = results[1]
+    print('Done.')
 
-    #connect to MySQL database
-    config = {
-            'user': 'root',
-            'password': '',
-            'host': 'localhost',
-            'port': '3306',
-            'database': 'BROVIS'
-        }
-    connection = mysql.connector.connect(**config)
-    cursor = connection.cursor()
-    for trans in btc_trans:
-        cursor.execute("INSERT INTO bitcoin "
-                   "(address, amount, txhash, xpub) "
-                   "VALUES ('%s', '%s', '%s', '%s') " % (trans.address, trans.amount, trans.txhash, XPUB_btc)
-                   )
-        connection.commit()
-    for trans in eth_trans:
-        cursor.execute("INSERT INTO ethereum "
-                   "(address, amount, txhash, xpub) "
-                   "VALUES ('%s', '%s', '%s', '%s') " % (trans.address, trans.amount, trans.txhash, xpub_eth)
-                   )
-        connection.commit()
-    
-    cursor.close()
-    connection.close()
+    connect(btc_trans, eth_trans, xpub_eth, xpub_btc)
 
     return render_template('home.html', hostname=socket.gethostname(), btcs=btcs, eths=eths, btc_trans=btc_trans, eth_trans=eth_trans)
 
+@app.route("/")
+def start():
+    return render_template('start.html')
+
+@app.route("/", methods=['POST'])
+def submitxpub():
+    xpub_btc = request.form['xpub_btc']
+    xpub_eth = request.form['xpub_eth']
+    return hello(xpub_eth, xpub_btc)
+    
 if __name__ == "__main__":
    app.run(host='0.0.0.0', port=80, use_reloader=False, debug=True)
 
