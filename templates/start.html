@@ -60,17 +60,29 @@
 <div id="clockdiv"></div> -->
 
 <form id="variables" method="POST" onsubmit="load()">
-    <br> Enter Your <i>Infura Rinkeby API Key</i>:
+    <br> Enter Your
+    <i>Infura Rinkeby API Key URL</i>:
     <input name="rink_api" maxlength="46" pattern=".{46}" title="Please enter your full Rinkeby API Key URL" required> Don't Have One?
     <a href="https://infura.io/signup">Register for Infura</a>
     </br>
-    <br> Enter Your <i>BIP32 BTC Testnet XPUB</i>:
+    <br> Enter Your
+    <i>BIP32 BTC Testnet XPUB</i>:
     <input name="xpub_btc" maxlength="111" pattern=".{111}" title="Valid extended public key must be 111 characters" required> Don't Have One?
     <a href="https://iancoleman.io/bip39/#bip32">Xpub Generator</a>
     </br>
-    <br> Enter Your <i>BIP32 ETH XPUB</i>:
+    <br> Enter Your
+    <i>BIP32 ETH XPUB</i>:
     <input name="xpub_eth" maxlength="111" pattern=".{111}" title="Valid extended public key must be 111 characters" required> Don't Have One?
     <a href="https://iancoleman.io/bip39/#bip32">Xpub Generator</a>
+    </br>
+    <br/>
+    <br> Enter Your
+    <i> Bitcoin Testnet Account Private Key to send from:</i>
+    <input name="btc_sk" maxlength="51" pattern=".{51}" title="Valid btc priv wif must be 51 characters" type="password" required>
+    </br>
+    <br> Enter Your
+    <i> Ethereum Account Private Key to send from:</i>
+    <input name="eth_sk" maxlength="64" pattern=".{64}" title="Valid btc priv wif must be 64 characters" type="password" required>
     </br>
     <br/>
     <br> Amount of Bitcoin transactions to run:
@@ -115,8 +127,8 @@
     </style>
 </form>
 <div align="center">
-<div id="load" class="loader" style="display: none"></div>
-<div id="message" style="display: none">Simulation is loading...</div>
+    <div id="load" class="loader" style="display: none"></div>
+    <div id="message" style="display: none">Simulation is loading...</div>
 </div>
 <script language="javascript" type="text/javascript">
     function load() {

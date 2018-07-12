@@ -51,7 +51,7 @@ def BTC_process(destination, priv_wif, fee):
                 url = 'https://testnet.blockexplorer.com/api/tx/send'
                 payload = {'rawtx': tx}
                 res = requests.post(url, data=payload)
- 
+                
                 if res.ok:
                     txid = res.json()['txid']
                     for x in range(len(destination)):
