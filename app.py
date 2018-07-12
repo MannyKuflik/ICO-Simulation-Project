@@ -47,7 +47,7 @@ def connect(btc_trans, eth_trans, xpub_eth, xpub_btc):
     #connect to MySQL database
     config = {
             'user': 'root',
-            'password': 'HorcruX8!',
+            'password': '',
             'host': 'localhost',
             'port': '3306',
             'database': 'BROVIS'
@@ -93,8 +93,8 @@ def hellob(btcs):
     print('BTC DONE')
     return btc_trans
 
-def helloe(eths):
-    web3 = Web3(HTTPProvider('https://rinkeby.infura.io/fP6CC5NSFDAcqMzWhPUe'))
+def helloe(eths, rink_api):
+    web3 = Web3(HTTPProvider(rink_api))
     nonce = web3.eth.getTransactionCount('0xde055eCaB590E0E7f2Cb06445dd6272fb7D65129') 
     ecnt = 0
     eth_trans = []
@@ -107,15 +107,15 @@ def helloe(eths):
     print('ETH DONE')
     return eth_trans
 
-def run_simul(eths, btcs):
+def run_simul(eths, btcs, rink_api):
     with ProcessPoolExecutor(max_workers=2) as executor:
-        e = executor.submit(helloe, eths)
+        e = executor.submit(helloe, eths, rink_api)
         b = executor.submit(hellob, btcs)
     return ( b.result(), e.result())
 
-def hello(xpub_eth, xpub_btc):
+def hello(btc_num, eth_num, xpub_btc, xpub_eth, rink_api):
     try:
-        wallets = full_wallets(50, 50, xpub_eth, xpub_btc)
+        wallets = full_wallets(btc_num, eth_num, xpub_eth, xpub_btc)
     except BTCError:
         print('invalid BTC XPUB')
         return render_template('btcerror.html')
@@ -124,9 +124,13 @@ def hello(xpub_eth, xpub_btc):
         return render_template('etherror.html')
     btcs = wallets[0]
     eths = wallets[1]
-    results = run_simul(eths, btcs)
-    btc_trans = results[0]
-    eth_trans = results[1]
+    render_template('bnumerror.html')
+    try:
+        results = run_simul(eths, btcs, rink_api)
+        btc_trans = results[0]
+        eth_trans = results[1]
+    except:
+        return render_template('simerror.html')
     print('Done.')
 
     connect(btc_trans, eth_trans, xpub_eth, xpub_btc)
@@ -137,12 +141,20 @@ def hello(xpub_eth, xpub_btc):
 def start():
     return render_template('start.html')
 
+@app.route("/run")
+def go():
+    time.sleep(10)
+    return render_template('bnumerror.html')
+
 @app.route("/", methods=['POST'])
 def submitxpub():
+    rink_api = request.form['rink_api']
     xpub_btc = request.form['xpub_btc']
     xpub_eth = request.form['xpub_eth']
-    return hello(xpub_eth, xpub_btc)
-    
+    btc_num = int(request.form['btc_num'])
+    eth_num = int(request.form['eth_num'])
+    return hello (btc_num, eth_num, xpub_btc, xpub_eth, rink_api)
+
 if __name__ == "__main__":
    app.run(host='0.0.0.0', port=80, use_reloader=False, debug=True)
 

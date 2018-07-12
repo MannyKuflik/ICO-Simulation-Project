@@ -34,30 +34,12 @@ def construct_tx(from_addr, to_address, val, nonce):
     return txparams
 
 def send_eth(from_addr, to_address, val, priv_key, nonce):
-    a = time.time()
     tx = construct_tx(from_addr, to_address, val, nonce) # this generates the transaction dict
-<<<<<<< HEAD
-    # print(tx)
-    b = time.time()
-    c = time.time()
-    print('transaction construction: ', b-a)
-=======
-
->>>>>>> be0d157d5803420c8eb998d5bc1fde6dfaf34004
+    
     web3.eth.enable_unaudited_features()
-    d = time.time()
-    print('enable audited features: ', d-c)
-    e = time.time()
+
     signed_tx = web3.eth.account.signTransaction(tx, priv_key)  # this returns a blob of hexadecimal text
-    f = time.time()
-    print('sign tx: ', f-e)
-    g = time.time()
+
     transhash = web3.eth.sendRawTransaction(signed_tx.rawTransaction)  # this broadcasts the tx and returns a transaction hash
-<<<<<<< HEAD
-    h = time.time()
-    print('send tx and get txid: ', h-g)
-    return web3.toHex(transhash) #web3.toHex(signed_tx.rawTransaction)
-=======
 
     return web3.toHex(transhash)
->>>>>>> be0d157d5803420c8eb998d5bc1fde6dfaf34004
