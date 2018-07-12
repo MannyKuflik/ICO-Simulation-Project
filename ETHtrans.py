@@ -15,9 +15,9 @@ app = Flask(__name__)
 # PRIV_KEY = "8c70afd6be9a772cd1fe852c411cc67b829f402c733a45d27b9b8eb6b9710dc4"
 # VAL = random.randint(10000, 10000000)
 
-web3 = Web3(HTTPProvider('https://rinkeby.infura.io/UVgPTn3TgFMB0KhHUlif'))
+# web3 = Web3(HTTPProvider('https://rinkeby.infura.io/UVgPTn3TgFMB0KhHUlif'))
 
-def construct_tx(from_addr, to_address, val, nonce):
+def construct_tx(from_addr, to_address, val, nonce, web3):
     if not web3.isChecksumAddress(to_address):
         print('pls use checksummed address')
         return False
@@ -33,8 +33,8 @@ def construct_tx(from_addr, to_address, val, nonce):
     }
     return txparams
 
-def send_eth(from_addr, to_address, val, priv_key, nonce):
-    tx = construct_tx(from_addr, to_address, val, nonce) # this generates the transaction dict
+def send_eth(from_addr, to_address, val, priv_key, nonce, web3):
+    tx = construct_tx(from_addr, to_address, val, nonce, web3) # this generates the transaction dict
     
     web3.eth.enable_unaudited_features()
 
