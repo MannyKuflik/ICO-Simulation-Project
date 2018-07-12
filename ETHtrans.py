@@ -5,6 +5,7 @@ from web3 import Web3, HTTPProvider, utils
 import json
 import sys
 import random
+import time
 
 app = Flask(__name__)
 
@@ -26,7 +27,7 @@ def construct_tx(from_addr, to_address, val, nonce):
         'chainId': 4,  # chainID for rinkeby
         'to': to_address,
         'data': '',
-        'value': val,
+        'value': val, 
         'gas': 24000,
         'gasPrice': web3.eth.gasPrice
     }
@@ -34,7 +35,7 @@ def construct_tx(from_addr, to_address, val, nonce):
 
 def send_eth(from_addr, to_address, val, priv_key, nonce):
     tx = construct_tx(from_addr, to_address, val, nonce) # this generates the transaction dict
-
+    
     web3.eth.enable_unaudited_features()
 
     signed_tx = web3.eth.account.signTransaction(tx, priv_key)  # this returns a blob of hexadecimal text

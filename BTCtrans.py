@@ -80,3 +80,37 @@ def BTC_process(destination, priv_wif, fee):
                     BTCS.append(BTC('Fail', 'N/A', 'Fail'))
                 break
     return BTCS
+
+#~~~~~~~~MULTIPLE OUTPUTS TEST~~~~~~~~~
+# dests = ['n2f8do8bCGtgQgkCv43efBsnvjV181x6a4','n2f8do8bCGtgQgkCv43efBsnvjV181x6a4','mgDryTfWY7PBBV1DH8vkFr2KHMHduwzct4']
+# print(BTC_process(dests, '93NUtNNeKfpPZTtB6dEBxjPhBBs8ksYZnHh26RuB8Xe9QUychy6', 5))
+
+#~~~~~~~~ORIGINAL CODE~~~~~~~~~
+# ntwrk = NetworkAPI()
+# money = ntwrk.get_balance_testnet('myuUCjnJxRmCm6aC2gpmY2nyGGS29PApRx')
+# print(money) 
+# key = PrivateKeyTestnet('93NUtNNeKfpPZTtB6dEBxjPhBBs8ksYZnHh26RuB8Xe9QUychy6')
+# print(key)
+# amount = float(random.randrange(1, 500))/100
+# print(amount)
+# dest = 'mrHXbzTszNWhav7egmfXVktopTBMotS4mp'
+# outputs = [(dest, amount, 'mbtc')]
+# unspents = ntwrk.get_unspent_testnet('myuUCjnJxRmCm6aC2gpmY2nyGGS29PApRx')
+# print("UNSPENTS: ", unspents)
+# tx = key.create_transaction(outputs, fee=8500, unspents=unspents)
+# print("TRANSACTION: ", tx)
+# stx = ntwrk.broadcast_tx_testnet(tx)
+# print("SUCCESS!")
+# key.send(outputs, fee=8500, unspents=unspents)
+
+#~~~~~~~~~~~~~~FAUCET FILLING SCRIPT~~~~~~~~~~~~~~~~~~
+# dest = 'mooc3xfCXBEkkcnpTJfSiD66PghEJ2moG4'
+# priv = '93CvyqZUTsVtNeWLfne7ZbpnG5npHXrabHL3ifmPPXvCjW5DxV4'
+# fee = 5000
+# num = 50000
+# BTC_process(dest, priv, fee, num)
+# print("Done")
+
+# def get_unspent_testnet(cls, address)
+# def broadcast_tx_testnet(cls, tx_hex)
+# def create_transaction or send(self, outputs, fee=None, leftover=None, combine=True, message=None, unspents=None):
