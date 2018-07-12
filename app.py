@@ -185,16 +185,6 @@ def hello(xpub_eth, xpub_btc):
     results = run_simul(eths, btcs)
     btc_trans = results[0]
     eth_trans = results[1]
-    # except:
-    #     web3 = None
-    #     nonce = None
-    #     btc_privs = []
-    #     btcs = []
-    #     eths = []
-    #     ecnt = 0
-    #     bcnt = 0
-    #     ethfl = "SYSTEM FAILURE"
-    #     btcfl = "SYSTEM FAILURE"
 
     print('Done.')
 
