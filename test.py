@@ -2,13 +2,10 @@ import pytest
 from unittest import TestCase
 from unittest.mock import patch
 import BTCtrans
-<<<<<<< HEAD
 import app
-=======
 import ETHtrans
 import web3
 from web3 import Web3, HTTPProvider, utils
->>>>>>> 75659af4409968e4f5ac8a1df88606c88a8d013e
 # from BTCtrans import round_sig, create_transaction, failed_broadcast
 
 from bit.network.services import NetworkAPI, BitpayAPI, InsightAPI
@@ -48,6 +45,7 @@ def mock_create_transaction(destination, destsamnts, key, fee=5):
     tx = key.create_transaction(outputs, fee=fee, unspents=unspents)
     return tx
 
+# Bitcoin Tests
 class TestBitcoin(TestCase):
 
     def test_round_sig():
@@ -82,6 +80,7 @@ class TestBitcoin(TestCase):
     #     for obj in x:
     #         print(obj.amount)
 
+# App Tests
 class TestApp(TestCase):
     def test_getAddFromPriv():
         assert (app.getAddFromPriv('3287c305f2036501677331d11871fddfa4bda29cb6e0938a6b05b2ad0144106a') == '0xfc854Cb31BEc57368AD122a90318a286Fa4B6092')
@@ -146,18 +145,15 @@ class TestAddresses(TestCase):
         raise AssertionError
     
 if __name__ == "__main__":
-    # TestBitcoin.test_round_sig()
-    # TestBitcoin.test_send_transaction()
-    # TestBitcoin.test_create_transaction()
-    # TestBitcoin.test_failed_broadcast()
-<<<<<<< HEAD
-    # TestBitcoin.test_addtoBTCS()
+    TestBitcoin.test_round_sig()
+    TestBitcoin.test_send_transaction()
+    TestBitcoin.test_create_transaction()
+    TestBitcoin.test_failed_broadcast()
+    TestBitcoin.test_addtoBTCS()
     TestApp.test_getAddFromPriv()
-=======
-    # TestEthereum.test_construct_tx_happy_case()
-    # TestEthereum.test_construct_tx_failing_case()
-    # TestAddresses.test_btc_wallet_happy_case()
-    # TestAddresses.test_btc_wallet_failing_case()
-    # TestAddresses.test_eth_wallet_happy_case()
-    # TestAddresses.test_eth_wallet_failing_case()
->>>>>>> 75659af4409968e4f5ac8a1df88606c88a8d013e
+    TestEthereum.test_construct_tx_happy_case()
+    TestEthereum.test_construct_tx_failing_case()
+    TestAddresses.test_btc_wallet_happy_case()
+    TestAddresses.test_btc_wallet_failing_case()
+    TestAddresses.test_eth_wallet_happy_case()
+    TestAddresses.test_eth_wallet_failing_case()
