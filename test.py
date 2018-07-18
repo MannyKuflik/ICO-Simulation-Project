@@ -156,3 +156,4 @@ if __name__ == "__main__":
     TestAddresses.test_btc_wallet_failing_case()
     TestAddresses.test_eth_wallet_happy_case()
     TestAddresses.test_eth_wallet_failing_case()
+    print("All tests passed")
