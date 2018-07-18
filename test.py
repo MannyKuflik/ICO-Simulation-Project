@@ -149,7 +149,6 @@ if __name__ == "__main__":
     TestBitcoin.test_send_transaction()
     TestBitcoin.test_create_transaction()
     TestBitcoin.test_failed_broadcast()
-    TestBitcoin.test_addtoBTCS()
     TestApp.test_getAddFromPriv()
     TestEthereum.test_construct_tx_happy_case()
     TestEthereum.test_construct_tx_failing_case()
