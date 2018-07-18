@@ -2,7 +2,13 @@ import pytest
 from unittest import TestCase
 from unittest.mock import patch
 import BTCtrans
+<<<<<<< HEAD
 import app
+=======
+import ETHtrans
+import web3
+from web3 import Web3, HTTPProvider, utils
+>>>>>>> 75659af4409968e4f5ac8a1df88606c88a8d013e
 # from BTCtrans import round_sig, create_transaction, failed_broadcast
 
 from bit.network.services import NetworkAPI, BitpayAPI, InsightAPI
@@ -16,6 +22,8 @@ from math import log10, floor
 import random 
 import time
 from models import BTC, ETH
+from ETHtrans import send_eth, construct_tx
+from GenAddrs import btc_wallet, eth_wallet
 
 #bitcoin variables
 key = PrivateKeyTestnet('92b82iRG1kDJqXgdQx9D1sVskdg5ShXD6f7ggWoP5wLJas65U1j')
@@ -78,10 +86,78 @@ class TestApp(TestCase):
     def test_getAddFromPriv():
         assert (app.getAddFromPriv('3287c305f2036501677331d11871fddfa4bda29cb6e0938a6b05b2ad0144106a') == '0xfc854Cb31BEc57368AD122a90318a286Fa4B6092')
 
+# Ethereum Tests
+class TestEthereum(TestCase):
+
+    def test_construct_tx_happy_case():
+        from_addr = '0xde055eCaB590E0E7f2Cb06445dd6272fb7D65129'
+        to_address = '0x6F544455D57caA0787A5200DA1FC379fc00B5Da5'
+        val = '5'
+        priv_key = '8c70afd6be9a772cd1fe852c411cc67b829f402c733a45d27b9b8eb6b9710dc4'
+        nonce = '1'
+        web3 = Web3(HTTPProvider('https://rinkeby.infura.io/UVgPTn3TgFMB0KhHUlif'))
+        response = construct_tx(from_addr, to_address, val, nonce, web3)
+        expected_results = {'nonce': '1', 'chainId': 4, 'to': '0x6F544455D57caA0787A5200DA1FC379fc00B5Da5', 'data': '', 'value': '5', 'gas': 24000, 'gasPrice': 1000000000}
+        assert response == expected_results
+
+    def test_construct_tx_failing_case():
+        from_addr = '0xde055ecab590e0e7f2cb06445dd6272fb7d65129'
+        to_address = '0x6f544455d57caA0787A5200da1fc379fc00b5da5'
+        val = '5'
+        priv_key = '8c70afd6be9a772cd1fe852c411cc67b829f402c733a45d27b9b8eb6b9710dc4'
+        nonce = '1'
+        web3 = Web3(HTTPProvider('https://rinkeby.infura.io/UVgPTn3TgFMB0KhHUlif'))
+        response = construct_tx(from_addr, to_address, val, nonce, web3)
+        expected_results = False
+        assert response == expected_results
+
+# Address Generation Tests
+class TestAddresses(TestCase):
+    def test_btc_wallet_happy_case():
+        btc_num = 5
+        xpub = 'tpubDAK3K7sXsKqVs6XNCnBUZQVj2Yy5Sc98XV4Sy9xVfTcaGv8AGm4x585DUYpbBx61zURUoyFsJWAokuZY8Edm5PqJ9wza7i4pxVPKCttKjZH'
+        response = btc_wallet(btc_num, xpub)
+        expected_results =  ['mgDryTfWY7PBBV1DH8vkFr2KHMHduwzct4', 'mpYCitAEcTYXr6ayqjvioxFngBW8MhM48U', 'n2f8do8bCGtgQgkCv43efBsnvjV181x6a4', 'mzrhmQRGKMCgx3o1PYY4DcHW5FgZPFZk9N', 'mzVu2YP4b67mJC5mfm3nbBYdQiCsBUXdtG']
+        assert response == expected_results
+    
+    def test_btc_wallet_failing_case():
+        btc_num = 5
+        xpub = 'failDAK3K7sXsKqVs6XNCnBUZQVj2Yy5Sc98XV4Sy9xVfTcaGv8AGm4x585DUYpbBx61zURUoyFsJWAokuZY8Edm5PqJ9wza7i4pxVPKCttKjZH'
+        try:
+            btc_wallet(btc_num, xpub)
+        except:
+            return True
+        raise AssertionError
+    
+    def test_eth_wallet_happy_case():
+        eth_num = 5
+        xpub = 'xpub6EPXZc2brBKKFUNH3bxcg17g5mi5Uo5YmHHe2j1dWqqzV5WEN8dQYWXSvFpXz1PNrW9G8de6qoPun3Eiz4qKmaLXmViVYEHmrXRF6JbQXUE'
+        response = eth_wallet(eth_num, xpub)
+        expected_results = ['0xbD6E27f76BC5590A511B7722ab9ae18bF1B0CCD2', '0xc7f5bf77C2306253bD36BF933a12C3B91e8EFDBA', '0xbBc8c60c155f041a82d86A1fbae075aBA333faCC', '0xa4Eaf144ED98D300cFD9a2484102C2292bF61911', '0x974c757595dB0Cb277a8916357cf73459112a487']
+        assert response == expected_results
+    
+    def test_eth_wallet_failing_case():
+        eth_num = 5
+        xpub = 'fail6EPXZc2brBKKFUNH3bxcg17g5mi5Uo5YmHHe2j1dWqqzV5WEN8dQYWXSvFpXz1PNrW9G8de6qoPun3Eiz4qKmaLXmViVYEHmrXRF6JbQXUE'
+        try:
+            eth_wallet(eth_num, xpub)
+        except:
+            return True
+        raise AssertionError
+    
 if __name__ == "__main__":
     # TestBitcoin.test_round_sig()
     # TestBitcoin.test_send_transaction()
     # TestBitcoin.test_create_transaction()
     # TestBitcoin.test_failed_broadcast()
+<<<<<<< HEAD
     # TestBitcoin.test_addtoBTCS()
     TestApp.test_getAddFromPriv()
+=======
+    # TestEthereum.test_construct_tx_happy_case()
+    # TestEthereum.test_construct_tx_failing_case()
+    # TestAddresses.test_btc_wallet_happy_case()
+    # TestAddresses.test_btc_wallet_failing_case()
+    # TestAddresses.test_eth_wallet_happy_case()
+    # TestAddresses.test_eth_wallet_failing_case()
+>>>>>>> 75659af4409968e4f5ac8a1df88606c88a8d013e
