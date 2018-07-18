@@ -1,5 +1,4 @@
-
-<img src="https://en.bitcoin.it/w/images/en/2/29/BC_Logo_.png" height="22px"><h1>ICO-Simulation-Project</h1><img src="http://introtocrypto.com/wp-content/uploads/2017/08/ether@2x.png" height="22px">
+<h1><img src="https://en.bitcoin.it/w/images/en/2/29/BC_Logo_.png" height="22px">ICO-Simulation-Project<img src="http://introtocrypto.com/wp-content/uploads/2017/08/ether@2x.png" height="22px" padding></h1>
 By Lawrence Li and Emanuel Kuflik
 
 <br/>
