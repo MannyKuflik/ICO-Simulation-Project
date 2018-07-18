@@ -15,3 +15,12 @@ class BTCError(ValueError):
 
 class ETHError(ValueError):
     pass
+
+class apiErr(ValueError):
+    pass
+    
+class enetErr(ValueError):
+    pass
+
+class bnetErr(ValueError):
+    pass

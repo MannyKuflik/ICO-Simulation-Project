@@ -1,28 +1,235 @@
 <!DOCTYPE html>
 <html>
-<h1 align="center" style="margin: 0">
-    <u>
-        <b>ICO SIMULATION SERVICE</b>
-    </u>
-</h1>
-<p align="center" style="margin: 0">By Lawrence Li and Emanuel Kuflik</p>
+
+<style>
+    html {
+        font-family: "Trebuchet MS", Helvetica, sans-serif;
+    }
+
+    #submit {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: 2px solid rgb(118, 118, 118);
+        border-radius: 10px;
+        -webkit-transition-duration: .7s;
+        transition-duration: .7s;
+        cursor: pointer;
+        background-color: white;
+        color: black;
+        outline: none;
+        width: 40%;
+        box-align: center;
+    }
+
+    #submit:hover {
+        border: 5px solid rgb(23, 207, 23);
+        background-color: #171717;
+        color: rgb(0, 241, 4);
+    }
+
+    #variables {
+        padding: 20px;
+        padding-top: 0;
+        background-color: rgb(39, 39, 39);
+        color: white;
+        border: 2px solid silver;
+        width: 93%;
+        text-align: center;
+    }
+
+    .ins {
+        margin: 8px 0;
+        padding: 14px 20px;
+        -webkit-transition-duration: .85s;
+        transition-duration: .85s;
+        border: 2px solid rgb(118, 118, 118);
+        border-radius: 4px;
+        width: 90%;
+    }
+
+    .ins:focus {
+        border: 5px solid rgb(23, 207, 23);
+        background-color: black;
+        color: rgb(0, 241, 4);
+        border-radius: 5px;
+        outline: none;
+    }
+
+    .nums {
+        margin: 8px 0;
+        padding: 14px 20px;
+        -webkit-transition-duration: .85s;
+        transition-duration: .85s;
+        border: 2px solid rgb(118, 118, 118);
+        border-radius: 4px;
+        width: 70%;
+    }
+
+    .nums:focus {
+        border: 5px solid rgb(23, 207, 23);
+        background-color: black;
+        color: rgb(0, 241, 4);
+        border-radius: 5px;
+        outline: none;
+    }
+</style>
+<div id="header">
+    <h1 align="center" style="margin: 0">
+        <u>
+            <b>ICO SIMULATION SERVICE</b>
+        </u>
+    </h1>
+    <p align="center" style="margin: 0">By Lawrence Li and Emanuel Kuflik</p>
+</div>
 <br/>
 <br/>
-<br/>
-<h2>About the Program</h2>
-<hr>
-<p>
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean varius velit quis nulla vulputate, quis fermentum est pellentesque.
-    Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras orci justo, viverra et eros
-    at, porttitor eleifend nibh. Nam lectus elit, placerat at tellus ut, lobortis dignissim massa. Aenean accumsan, neque
-    eget vulputate eleifend, metus enim rhoncus magna, at pharetra justo dolor vel augue. Pellentesque aliquam accumsan lacus,
-    in pretium odio interdum eu. Integer mollis tempor aliquet. Mauris nunc nisi, sagittis sit amet suscipit nec, cursus
-    maximus magna.
-</p>
-<h2>Simulation Variables</h2>
-<hr>
+<table>
+    <col width="50%">
+    <col width="50%">
+    <tr>
+        <td valign="top">
+            <div style="border: 2px solid black; background-color: white ;padding: 20px; padding-top: 0;">
+                <h2>About the Program</h2>
+                <hr>
+                <h3>
+                    <b>
+                        <u>Usage:</u>
+                    </b>
+                </h3>
+                <p>
+                    Our program simulates the ICO investing process. This is accomplished by sending up to 5000 Bitcoin testnet transactions
+                    and up to 5000 Ethereum Rinkeby Network transactions. By utilizing these "fake" coin networks, we are
+                    able to simulate what a real investing period might look like. We also have persistent storage through
+                    a mysql database that allows the user to use our simulation for testing their own blockchain functionalities
+                    like a blockchain watching service. </p>
+                <h3>
+                    <b>
+                        <u>Runtime:</u>
+                    </b>
+                </h3>
+                <p> The runtime for a full simulation (10,000 total transactions) is usually around 1.5-2 hours. Unfortunately
+                    there are bugs in this program that mainly have to do with our limitations of using third party test
+                    networks and so if there is an error while your simulation is running, you will be notified and directed
+                    to a new page to try again. Try to give it a minute or two between simulations if this is recurring.</p>
+                <h3>
+                    <b>
+                        <u>Variables Explained:</u>
+                    </b>
+                </h3>
+                <div style="font-size: 11px">
+                    <p>
+                        <b>Infura Rinkeby API key</b> - When you sign up for the Infura service they provide you for various
+                        api kesy to work with ethereum and its many test networks. We use the rinkeby network because it
+                        is fast, easy to work with, and has a
+                        <a href="https://faucet.rinkeby.io/">reliable faucet</a> for filling up test accounts with rinkeby ETH.</p>
+                    <p>
+                        <b>Extended public keys</b> - Extended public keys allow us to generate an endless amount of bitcoin
+                        testnet or ethereum address from a single address. It also gives the user access to all of those
+                        addresses without needing to store the private keys for every single account. To obtain one, go to
+                        the
+                        <a href="https://iancoleman.io/bip39/#bip32">link</a> provided, select "Bitcoin Testnet" for the bitcoin xpub or "Ethereum" for the ethereum xpub
+                        and then click "generate" at the top of the page to generate a random mneumonic that is used to generate
+                        your extended keys. Make sure to select BIP32 as well and copy the
+                        <b>public</b> xpub, not the private one.
+                    </p>
+                    <p>
+                        <b>Ethereum private key</b> - In order for multiple simulations to be running at once, each user must
+                        be sending ethereum fromt their own rinkeby wallets. If you don't have one, you can generate an ethereum
+                        wallet and fill it using rinkeby eth from the faucet linked above. Don't worry, <b>we will never save
+                        this private key</b>. A good way to manage and keep track of your ethereum wallets is by using a service
+                        like
+                        <a href="https://metamask.io/">Metamask</a>.
+                    </p>
+                </div>
+            </div>
+
+        </td>
+        <td valign="top">
+            <form id="variables" method="POST" onsubmit="load()">
+                <h2>Required Variables</h2>
+                <hr>
+                <br> Enter Your
+                <b>Infura Rinkeby API Key URL</b>: Don't Have One?
+                <a href="https://infura.io/signup" style="color: greenyellow;">Register for Infura</a>
+                <br/>
+                <input class="ins" name="rink_api" maxlength="46" pattern=".{46}" title="Please enter your full Rinkeby API Key URL" required>
+                </br>
+                <br> Enter Your
+                <b>BIP32 BTC Testnet XPUB</b>: Don't Have One?
+                <a href="https://iancoleman.io/bip39/#bip32" style="color: greenyellow;">Xpub Generator</a>
+                <br/>
+                <input class="ins" name="xpub_btc" maxlength="111" pattern=".{111}" title="Valid extended public key must be 111 characters"
+                    required>
+                </br>
+                <br> Enter Your
+                <b>BIP32 ETH XPUB</b>: Don't Have One?
+                <a href="https://iancoleman.io/bip39/#bip32" style="color: greenyellow;">Xpub Generator</a>
+                <br/>
+                <input class="ins" name="xpub_eth" maxlength="111" pattern=".{111}" title="Valid extended public key must be 111 characters"
+                    required>
+                </br>
+                <br> Enter Your
+                <b> Ethereum Source Account Private Key to send from:</b>
+                <br>
+                <input class="ins" name="eth_sk" maxlength="64" pattern=".{64}" title="Valid eth priv wif must be 64 characters" type="password"
+                    required>
+                </br>
+                <br/>
+                <table>
+                    <col width="50%">
+                    <col width="50%">
+                    <tr>
+                        <td>
+                            Amount of Bitcoin Testnet transactions to run:
+                        </td>
+                        <td>
+                            Amount of Ethereum transactions to run:
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input class="nums" width="40%" name="btc_num" type="number" min="0" max="5000" required>
+                        </td>
+                        <td>
+                            <input class="nums" width="40%" name="eth_num" type="number" min="0" max="5000" required>
+                        </td>
+                    </tr>
+    </tr>
+    </table>
+    </br>
+    </br>
+    <button id="submit" align="middle" type="submit" form="variables">Run Simulation</button>
+    </form>
+    <div id="onsubmition" align="center" style="display: none; border: 2px solid black">
+        <h2 id="wait">Please Wait</h2>
+        <hr>
+        <iframe id="loading" width="20%" height="15%" src="https://lottiefiles.com/iframe/47-gears" frameborder="0" allowfullscreen></iframe>
+        <div id="message" style="padding: 10px">Your Simulation is loading...</div>
+    </div>
+    <script language="javascript" type="text/javascript">
+        function load() {
+            document.getElementById("variables").style.display = "none"
+            document.getElementById("onsubmition").style.display = "block"
+        }
+    </script>
+    </td>
+
+    </tr>
+</table>
+<footer style="text-align: center; border: 2px solid black; font-family: monospace; color: snow; padding: 5px; background-color: lightslategray;">
+    <p>If you have any questions about the service you can email the creators at
+        <br/> Emanuel Kuflik - mannykuflik@gmail.com
+        <br/> Lawrence Li - lawrence20172103@gmail.com
+    </p>
+</footer>
 
 <!-- <script>
+
+    Generating addresses: y = 6264.096 + (0.3962452 - 6264.096)/(1 + (x/83248.09)^1.05043)
+    
+
+
+
     // 10 minutes from now
     var time_in_minutes = .1;
     var current_time = Date.parse(new Date());
@@ -58,84 +265,5 @@
 </form>
 
 <div id="clockdiv"></div> -->
-
-<form id="variables" method="POST" onsubmit="load()">
-    <br> Enter Your
-    <i>Infura Rinkeby API Key URL</i>:
-    <input name="rink_api" maxlength="46" pattern=".{46}" title="Please enter your full Rinkeby API Key URL" required> Don't Have One?
-    <a href="https://infura.io/signup">Register for Infura</a>
-    </br>
-    <br> Enter Your
-    <i>BIP32 BTC Testnet XPUB</i>:
-    <input name="xpub_btc" maxlength="111" pattern=".{111}" title="Valid extended public key must be 111 characters" required> Don't Have One?
-    <a href="https://iancoleman.io/bip39/#bip32">Xpub Generator</a>
-    </br>
-    <br> Enter Your
-    <i>BIP32 ETH XPUB</i>:
-    <input name="xpub_eth" maxlength="111" pattern=".{111}" title="Valid extended public key must be 111 characters" required> Don't Have One?
-    <a href="https://iancoleman.io/bip39/#bip32">Xpub Generator</a>
-    </br>
-    <br/>
-    <br> Enter Your
-    <i> Bitcoin Testnet Account Private Key to send from:</i>
-    <input name="btc_sk" maxlength="51" pattern=".{51}" title="Valid btc priv wif must be 51 characters" type="password" required>
-    </br>
-    <br> Enter Your
-    <i> Ethereum Account Private Key to send from:</i>
-    <input name="eth_sk" maxlength="64" pattern=".{64}" title="Valid btc priv wif must be 64 characters" type="password" required>
-    </br>
-    <br/>
-    <br> Amount of Bitcoin transactions to run:
-    <input name="btc_num" type="number" min="0" max="5000" required>
-    </br>
-    <br> Amount of Ethereum transactions to run:
-    <input name="eth_num" type="number" min="0" max="5000" required>
-    </br>
-    <br>
-    <input style="font-size: 24px" type="submit">
-    </br>
-    <style>
-        .loader {
-            border: 16px solid #f3f3f3;
-            border-radius: 50%;
-            border-top: 16px solid #3498db;
-            width: 150px;
-            height: 150px;
-            -webkit-animation: spin 2s linear infinite;
-            /* Safari */
-            animation: spin 2s linear infinite;
-            align: center;
-        }
-
-        @-webkit-keyframes spin {
-            0% {
-                -webkit-transform: rotate(0deg);
-            }
-            100% {
-                -webkit-transform: rotate(360deg);
-            }
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-    </style>
-</form>
-<div align="center">
-    <div id="load" class="loader" style="display: none"></div>
-    <div id="message" style="display: none">Simulation is loading...</div>
-</div>
-<script language="javascript" type="text/javascript">
-    function load() {
-        document.getElementById("variables").style.display = "none"
-        document.getElementById("message").style.display = "block"
-        document.getElementById("load").style.display = "block"
-    }
-</script>
 
 </html>
