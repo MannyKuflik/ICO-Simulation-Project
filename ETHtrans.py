@@ -19,7 +19,6 @@ app = Flask(__name__)
 
 def construct_tx(from_addr, to_address, val, nonce, web3):
     if not web3.isChecksumAddress(to_address):
-        print('pls use checksummed address')
         return False
     unique = nonce
     txparams = {
@@ -42,4 +41,6 @@ def send_eth(from_addr, to_address, val, priv_key, nonce, web3):
 
     transhash = web3.eth.sendRawTransaction(signed_tx.rawTransaction)  # this broadcasts the tx and returns a transaction hash
 
-    return web3.toHex(transhash)
+    txid = transhash.hex()
+
+    return txid

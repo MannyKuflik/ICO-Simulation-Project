@@ -47,7 +47,7 @@ def connect(btc_trans, eth_trans, xpub_eth, xpub_btc):
     #connect to MySQL database
     config = {
             'user': 'root',
-            'password': '',
+            'password': 'HorcruX8!',
             'host': 'localhost',
             'port': '3306',
             'database': 'BROVIS'
@@ -180,4 +180,3 @@ def submitxpub():
 
 if __name__ == "__main__":
    app.run(host='0.0.0.0', port=80, use_reloader=False, debug=True)
-
