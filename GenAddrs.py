@@ -18,9 +18,6 @@ def gen_btc(index, wallet_btc):
     address = new_node.address()
     return address
 
-# xpub_btc = "tpubDAK3K7sXsKqVs6XNCnBUZQVj2Yy5Sc98XV4Sy9xVfTcaGv8AGm4x585DUYpbBx61zURUoyFsJWAokuZY8Edm5PqJ9wza7i4pxVPKCttKjZH"
-# xpub_eth = 'xpub6EPXZc2brBKKFUNH3bxcg17g5mi5Uo5YmHHe2j1dWqqzV5WEN8dQYWXSvFpXz1PNrW9G8de6qoPun3Eiz4qKmaLXmViVYEHmrXRF6JbQXUE'
-
 def run_simul(eth_num, btc_num, xpub_e, xpub_b):
     with ProcessPoolExecutor(max_workers=2) as executor:
         e = executor.submit(eth_wallet, eth_num, xpub_e)
@@ -59,4 +56,11 @@ def full_wallets(btc_num, eth_num, xpub_e, xpub_b):
     eth_addrs = addrs[1]
     return (btc_addrs, eth_addrs)
 
-# print(full_wallets(5,5, xpub_eth, XPUB_btc))
+# xpub_btc = "tpubDAK3K7sXsKqVs6XNCnBUZQVj2Yy5Sc98XV4Sy9xVfTcaGv8AGm4x585DUYpbBx61zURUoyFsJWAokuZY8Edm5PqJ9wza7i4pxVPKCttKjZH"
+# xpub_eth = 'xpub6EPXZc2brBKKFUNH3bxcg17g5mi5Uo5YmHHe2j1dWqqzV5WEN8dQYWXSvFpXz1PNrW9G8de6qoPun3Eiz4qKmaLXmViVYEHmrXRF6JbQXUE'
+# x = 500
+# for i in range(10): 
+#     a = time.time()
+#     (full_wallets(x,x, xpub_eth, xpub_btc))
+#     b = time.time()
+#     print('trial no. ', i+1, ' , ', x, " addresses took ", b-a, ' sec')

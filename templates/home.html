@@ -5,6 +5,10 @@
     <title>Flask app</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
     <style>
+        #header {
+            font-family: "Trebuchet MS", Helvetica, sans-serif;
+        }
+
         #header-fixed {
             position: fixed;
             top: 0px;
@@ -54,6 +58,7 @@
             text-decoration: none;
             font-size: 17px;
         }
+
         #navbar2 {
             overflow: hidden;
             background-color: rgb(45, 45, 58);
@@ -83,6 +88,7 @@
             max-width: 600px;
             float: left;
         }
+
         .sticky2 {
             position: fixed;
             top: 0;
@@ -99,12 +105,15 @@
 
 <br/>
 <br/>
+<h6 style="color: rgba(255, 255, 255, 0.5)"> *Db connection: {{db}}</h6>
+<div id="header">
 <h1 align="center" style="margin: 0">
     <u>
         <b style="color: white">ICO SIMULATION SERVICE</b>
     </u>
 </h1>
 <p align="center" style="color: gainsboro; margin: 0">By Lawrence Li and Emanuel Kuflik</p>
+</div>
 <br/>
 
 <body>
@@ -118,7 +127,9 @@
                     <a align="left" style="text-align: left; width: 28%">Bitcoin Address</a>
                     <a align="left" style="text-align: left; width: 13%">Amount</a>
                     <a align="left" style="text-align: left; width: 15%">Tx ID</a>
-                    <a><img src= "https://en.bitcoin.it/w/images/en/2/29/BC_Logo_.png" height="22px"/></a>
+                    <a>
+                        <img src="https://en.bitcoin.it/w/images/en/2/29/BC_Logo_.png" height="22px" />
+                    </a>
                 </div>
 
                 <div id="btc" class="datagrid" style=" background-color: rgb(114, 56, 36)">
@@ -147,10 +158,12 @@
             </td>
             <td valign="top">
                 <div id="navbar2" style="margin-bottom: 8px">
-                        <a align="left" style="text-align: left; width: 28%">Ethereum Address</a>
-                        <a align="left" style="text-align: left; width: 13%">Amount</a>
-                        <a align="left" style="text-align: left; width: 15%">Tx ID</a>
-                        <a><img src="http://introtocrypto.com/wp-content/uploads/2017/08/ether@2x.png" height="22px"/></a>
+                    <a align="left" style="text-align: left; width: 28%">Ethereum Address</a>
+                    <a align="left" style="text-align: left; width: 13%">Amount</a>
+                    <a align="left" style="text-align: left; width: 15%">Tx ID</a>
+                    <a>
+                        <img src="http://introtocrypto.com/wp-content/uploads/2017/08/ether@2x.png" height="22px" />
+                    </a>
                 </div>
 
                 <div class="eth">
