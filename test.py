@@ -69,9 +69,7 @@ class TestBitcoin(TestCase):
         x = BTCtrans.addtoBTCS
         print(x)
 
-
-
-    # Ethereum Tests
+# Ethereum Tests
 class TestEthereum(TestCase):
 
     def test_construct_tx_happy_case():
@@ -96,6 +94,7 @@ class TestEthereum(TestCase):
         expected_results = False
         assert response == expected_results
 
+# Address Generation Tests
 class TestAddresses(TestCase):
     def test_btc_wallet_happy_case():
         btc_num = 5
