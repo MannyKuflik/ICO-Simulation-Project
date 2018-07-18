@@ -2,4 +2,4 @@ language: python
 python:
   - 3.6
 script:
-  - docker run -p 4000:80 mannykuf/simulation:v2
+  - python test.py
