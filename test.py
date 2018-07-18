@@ -130,12 +130,12 @@ class TestAddresses(TestCase):
         raise AssertionError
     
 if __name__ == "__main__":
-    TestBitcoin.test_round_sig()
-    TestBitcoin.test_create_transaction()
-    TestBitcoin.test_failed_broadcast()
-    TestEthereum.test_construct_tx_happy_case()
-    TestEthereum.test_construct_tx_failing_case()
-    TestAddresses.test_btc_wallet_happy_case()
-    TestAddresses.test_btc_wallet_failing_case()
-    TestAddresses.test_eth_wallet_happy_case()
-    TestAddresses.test_eth_wallet_failing_case()
+    # TestBitcoin.test_round_sig()
+    # TestBitcoin.test_create_transaction()
+    # TestBitcoin.test_failed_broadcast()
+    # TestEthereum.test_construct_tx_happy_case()
+    # TestEthereum.test_construct_tx_failing_case()
+    # TestAddresses.test_btc_wallet_happy_case()
+    # TestAddresses.test_btc_wallet_failing_case()
+    # TestAddresses.test_eth_wallet_happy_case()
+    # TestAddresses.test_eth_wallet_failing_case()
