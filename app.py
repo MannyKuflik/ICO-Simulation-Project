@@ -124,7 +124,7 @@ def run_simul(eths, btcs, rink_api, eth_sk):
     with ProcessPoolExecutor(max_workers=2) as executor:
         e = executor.submit(helloe, eths, rink_api, eth_sk)
         b = executor.submit(hellob, btcs)
-    return ( b.result(), e.result())
+    return (b.result(), e.result())
 
 def hello(btc_num, eth_num, xpub_btc, xpub_eth, eth_sk,  rink_api):
     err=""

@@ -20,6 +20,7 @@ def send_transaction(res, destination, key, destsamnts, fee):
     url = 'https://testnet.blockexplorer.com/api/tx/send'
     payload = {'rawtx': tx}
     res2 = requests.post(url, data=payload)
+    print(res2)
     return (res2, destsamnts)
 
 def create_transaction(res, destination, destsamnts, key, fee):
