@@ -1,12 +1,12 @@
 import pytest
 from unittest import TestCase
 from unittest.mock import patch
-import BTCtrans
+import trans_btc
+import trans_eth
 import app
-import ETHtrans
 import web3
 from web3 import Web3, HTTPProvider, utils
-# from BTCtrans import round_sig, create_transaction, failed_broadcast
+# from trans_btc import round_sig, create_transaction, failed_broadcast
 
 from bit.network.services import NetworkAPI, BitpayAPI, InsightAPI
 from bit.transaction import calc_txid
@@ -19,8 +19,8 @@ from math import log10, floor
 import random 
 import time
 from models import BTC, ETH
-from ETHtrans import send_eth, construct_tx
-from GenAddrs import btc_wallet, eth_wallet
+from trans_eth import send_eth, construct_tx
+from gen_addrs import btc_wallet, eth_wallet
 
 #bitcoin variables
 key = PrivateKeyTestnet('92b82iRG1kDJqXgdQx9D1sVskdg5ShXD6f7ggWoP5wLJas65U1j')
@@ -38,7 +38,7 @@ def mock_create_transaction(destination, destsamnts, key, fee=5):
     outputs = []
     for x in destination:
         amnt = 500
-        amount = BTCtrans.round_sig((amnt/1000), 4) 
+        amount = trans_btc.round_sig((amnt/1000), 4) 
         outputs.append((x, amnt, 'mbtc'))
         destsamnts.append((x, amount))
 
@@ -49,15 +49,15 @@ def mock_create_transaction(destination, destsamnts, key, fee=5):
 class TestBitcoin(TestCase):
 
     def test_round_sig():
-        assert BTCtrans.round_sig(1234560, 4) == 1235000
-        assert BTCtrans.round_sig(0.000456, 2) == 0.00046
+        assert trans_btc.round_sig(1234560, 4) == 1235000
+        assert trans_btc.round_sig(0.000456, 2) == 0.00046
 
     @patch('requests.post')
-    @patch('BTCtrans.create_transaction')
+    @patch('trans_btc.create_transaction')
     def test_send_transaction(mock_create_trans, mock_requests):
         mock_create_trans.return_value = '010000000126651c0bfea1f7f471f06deac7aeb036c2ee70271e04ff3d91127bd443bfbfdb010000008b48304502210086b9842ccb485378f3ef7a0627e8cbde4c2100258f6d677ef5b96259f467be2c022048c341b2d158ab61ef08ed62ca9a04f204b76cd4c07dbff898e1ae2792cf804e0141049b3249d74128dd68277a63c11cb09956dcc167904e8a6993779abaa416fbff22f5558d59c17aa836013b8a43c425aacfc19b96011cebc85fd1e7a7a390a23636ffffffff0380f0fa02000000001976a914663bfb4ddb23d714258cf9e7c868da5aade7a31e88ac80f0fa02000000001976a9140b3d83be5c38c473c2aefc14095284d0dc6555f288ac3b1c7215000000001976a9144b820d01817f597d072a333776f4d672499ed57388ac00000000'
         mock_requests.return_value = 200
-        assert BTCtrans.send_transaction(res, destination, key, destsamnts, fee=5) == (200, '1')
+        assert trans_btc.send_transaction(res, destination, key, destsamnts, fee=5) == (200, '1')
 
     def test_create_transaction():
         assert mock_create_transaction(destination, destsamnts, key, fee=5) == '010000000126651c0bfea1f7f471f06deac7aeb036c2ee70271e04ff3d91127bd443bfbfdb010000008b48304502210086b9842ccb485378f3ef7a0627e8cbde4c2100258f6d677ef5b96259f467be2c022048c341b2d158ab61ef08ed62ca9a04f204b76cd4c07dbff898e1ae2792cf804e0141049b3249d74128dd68277a63c11cb09956dcc167904e8a6993779abaa416fbff22f5558d59c17aa836013b8a43c425aacfc19b96011cebc85fd1e7a7a390a23636ffffffff0380f0fa02000000001976a914663bfb4ddb23d714258cf9e7c868da5aade7a31e88ac80f0fa02000000001976a9140b3d83be5c38c473c2aefc14095284d0dc6555f288ac3b1c7215000000001976a9144b820d01817f597d072a333776f4d672499ed57388ac00000000'
@@ -70,12 +70,12 @@ class TestBitcoin(TestCase):
     #     assert BTCS[-1].txid == 'a6ba7075d42e8a3b6f40437c08e6c2480da522725dad4fdc482c5b4f49dfabe6'
 
     def test_failed_broadcast():
-        assert BTCtrans.failed_broadcast(11, ['mpqX5Dfy89zLrVFbo6JDkdH4NTcRKbFebK', 'mgYPRGum3A7Rsb2eP93vDGwyWjguRbK4ns'], [])
+        assert trans_btc.failed_broadcast(11, ['mpqX5Dfy89zLrVFbo6JDkdH4NTcRKbFebK', 'mgYPRGum3A7Rsb2eP93vDGwyWjguRbK4ns'], [])
     
-    # @patch('BTCtrans.broadcast')
+    # @patch('trans_btc.broadcast')
     # def test_addtoBTCS(mock_BTC):
     #     mock_BTC().return_value = (200, [('mzrhmQRGKMCgx3o1PYY4DcHW5FgZPFZk9N', 2.9e-07), ('mzrhmQRGKMCgx3o1PYY4DcHW5FgZPFZk9N', 4.33e-07), ('mzrhmQRGKMCgx3o1PYY4DcHW5FgZPFZk9N', 3.53e-07), ('mzrhmQRGKMCgx3o1PYY4DcHW5FgZPFZk9N', 2.83e-07), ('mpYCitAEcTYXr6ayqjvioxFngBW8MhM48U', 1.94e-07)], True)
-    #     x = BTCtrans.addtoBTCS(destination, key, destsamnts, fee, BTCS)
+    #     x = trans_btc.addtoBTCS(destination, key, destsamnts, fee, BTCS)
     #     # print(x)
     #     for obj in x:
     #         print(obj.amount)
@@ -144,16 +144,16 @@ class TestAddresses(TestCase):
             return True
         raise AssertionError
     
-if __name__ == "__main__":
-    TestBitcoin.test_round_sig()
-    TestBitcoin.test_send_transaction()
-    TestBitcoin.test_create_transaction()
-    TestBitcoin.test_failed_broadcast()
-    TestApp.test_getAddFromPriv()
-    TestEthereum.test_construct_tx_happy_case()
-    TestEthereum.test_construct_tx_failing_case()
-    TestAddresses.test_btc_wallet_happy_case()
-    TestAddresses.test_btc_wallet_failing_case()
-    TestAddresses.test_eth_wallet_happy_case()
-    TestAddresses.test_eth_wallet_failing_case()
-    print("All tests passed")
+# if __name__ == "__main__":
+#     TestBitcoin.test_round_sig()
+#     TestBitcoin.test_send_transaction()
+#     TestBitcoin.test_create_transaction()
+#     TestBitcoin.test_failed_broadcast()
+#     TestApp.test_getAddFromPriv()
+#     TestEthereum.test_construct_tx_happy_case()
+#     TestEthereum.test_construct_tx_failing_case()
+#     TestAddresses.test_btc_wallet_happy_case()
+#     TestAddresses.test_btc_wallet_failing_case()
+#     TestAddresses.test_eth_wallet_happy_case()
+#     TestAddresses.test_eth_wallet_failing_case()
+#     print("All tests passed")

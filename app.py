@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
-from BTCtrans import BTC_process
-from ETHtrans import send_eth
-from GenAddrs import full_wallets
+from trans_btc import BTC_process
+from trans_eth import send_eth
+from gen_addrs import full_wallets
 from web3 import Web3, HTTPProvider, utils
 import mysql.connector  
 
