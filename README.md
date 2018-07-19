@@ -6,7 +6,7 @@ By Lawrence Li and Emanuel Kuflik
 <br/>
 
 ## Description
-Simulates ICO investing Process. The simulation accomplishes this by sending up to several thousand testnet bitcion and rinkeby net ethereum transactions in order to test funactionalities like a Blockchain Watching Service
+Simulates ICO investing Process. The simulation accomplishes this by sending up to several thousand testnet bitcion and rinkeby net ethereum transactions in order to test funactionalities like a Blockchain Watching Service.
 
 <br/>
 
