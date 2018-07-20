@@ -21,7 +21,7 @@ in the command line. It'll run on localhost:4000
 If you want database integration you'll need to clone this repo onto your local machine 
 <pre>$ git clone https://github.com/MannyKuflik/ICO-Simulation-Project.git</pre>
 and configure the variables in connect() in app.py to match the variables for a local Mysql Schema you set up. This can be done through [MySQLWorkbench](https://dev.mysql.com/downloads/workbench/?utm_source=tuicool).
-<br/>
+<br/><br/>
 Once it is configured, you can run it by calling:
 <pre>$ sudo python app.py</pre>  
 in the command line. It'll run on localhost(0.0.0.0)
